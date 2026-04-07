@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BookmarkController;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/pages', [HomeController::class, 'index'])->name('pages.index');

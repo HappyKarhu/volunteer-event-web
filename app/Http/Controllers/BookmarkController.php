@@ -17,7 +17,7 @@ class BookmarkController extends Controller
         $user = Auth::user();
 
         $bookmarks = $user->savedEvents()->orderBy('event_user_saves.created_at', 'desc')->paginate(9);
-        return view('events.bookmarked')->with('bookmarks', $bookmarks);
+        return view('events.saved')->with('bookmarks', $bookmarks);
         }
 
 

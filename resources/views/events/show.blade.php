@@ -108,7 +108,10 @@
         @if($canApply)
             <form action="{{ route('events.apply', $event) }}" method="POST">
                 @csrf
-                <button class="bg-emerald-600 hover:bg-amber-500 text-white py-3 px-6 rounded shadow transition w-full md:w-auto">
+                <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
+                        bg-emerald-600 text-white hover:bg-amber-500">
+                    <i class="fa-solid fa-paper-plane"></i>
                     Apply to Event
                 </button>
             </form>
@@ -123,12 +126,11 @@
         {{-- Back Button --}}
         <div class="mt-8">
             <a href="{{ route('events.index') }}" 
-            class="inline-flex items-center gap-2 bg-white text-gray-800 py-2 px-4 rounded shadow hover:shadow-lg hover:bg-emerald-50 transition">
-                <!-- Left arrow icon -->
+            class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
+                    bg-white text-gray-800 hover:bg-emerald-50">
                 <span class="text-lg">&larr;</span>
                 <span>Back to Events</span>
             </a>
         </div>
-        
     </div>
 </x-layout>

@@ -44,8 +44,9 @@
 
         {{-- Bottom Buttons: Details + Save/Unsave --}}
         <div class="flex items-center justify-between mt-3">
+
             {{-- Details Button --}}
-            <a href="{{ route('events.show', $event) }}" class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition-colors duration-200">
+            <a href="{{ route('events.show', $event) }}" class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition-colors duration-200 transform hover:scale-105">
                 <i class="fa-solid fa-circle-info"></i>
                 Details
             </a>
@@ -58,13 +59,13 @@
                         @if(auth()->user()->savedEvents->contains($event))
                             @method('DELETE')
                             <button type="submit"
-                            class="flex items-center gap-2 text-white bg-amber-500 hover:bg-amber-600 border border-amber-500 px-3 py-1 rounded text-sm transition-colors duration-200">
+                            class="flex items-center gap-2 text-white bg-amber-500 hover:bg-amber-600 border border-amber-500 px-3 py-1 rounded text-sm transition duration-200 transform hover:scale-105">
                                 <i class="fa-solid fa-bookmark"></i>
                                 Saved
                             </button>
                         @else
                             <button type="submit"
-                                    class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition-colors duration-200">
+                                    class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition duration-200 transform hover:scale-105">
                                 <i class="fa-regular fa-bookmark"></i>
                                 Save
                             </button>

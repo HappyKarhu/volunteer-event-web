@@ -17,7 +17,7 @@ class EventController extends Controller
     public function index(): View
     {
         $title = 'Available Events';
-    $events = Event::all(); // Fetch all events from the database
+        $events = Event::all(); // Fetch all events from the database
 
     return view('events.index', compact('events', 'title'));
     }
@@ -98,7 +98,8 @@ class EventController extends Controller
      */
     public function show(Event $event): View
     {
-        return view('events.show', compact('event'));
+        $canApply = auth()->check() && auth()->user()->role === 'volunteer';
+    return view('events.show', compact('event', 'canApply'));;
     }
 
     /**

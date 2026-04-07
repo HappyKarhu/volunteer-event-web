@@ -105,13 +105,30 @@
             </div>
         </div>
 
+        @if($canApply)
+            <form action="{{ route('events.apply', $event) }}" method="POST">
+                @csrf
+                <button class="bg-emerald-600 hover:bg-amber-500 text-white py-3 px-6 rounded shadow transition w-full md:w-auto">
+                    Apply to Event
+                </button>
+            </form>
+        @else
+            @auth
+                <p class="text-gray-500 text-sm">Only volunteers can apply for this event.</p>
+            @else
+                <p class="text-gray-500 text-sm">Login as a volunteer to apply for this event.</p>
+            @endauth
+        @endif
+
         {{-- Back Button --}}
-        <div>
+        <div class="mt-8">
             <a href="{{ route('events.index') }}" 
-            icon="person-walking-arrow-loop-left"
-               class="inline-block bg-white hover:shadow-lg transition hover:bg-emerald-50 text-gray-800 py-2 px-4 rounded transition">
-               &larr; Back to Events
+            class="inline-flex items-center gap-2 bg-white text-gray-800 py-2 px-4 rounded shadow hover:shadow-lg hover:bg-emerald-50 transition">
+                <!-- Left arrow icon -->
+                <span class="text-lg">&larr;</span>
+                <span>Back to Events</span>
             </a>
         </div>
+        
     </div>
 </x-layout>

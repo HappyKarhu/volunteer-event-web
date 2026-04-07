@@ -72,9 +72,20 @@ class User extends Authenticatable
     /**
      * Relationship: events the volunteer is attending
      */
-    public function attendedEvents()
-    {
-        return $this->belongsToMany(Event::class, 'event_attendees', 'user_id', 'event_id')
-                    ->withTimestamps();
-    }
+    public function eventAttendances()
+{
+    return $this->hasMany(EventAttendee::class);
+}
+
+public function attendedEvents()
+{
+    return $this->hasManyThrough(
+        Event::class,
+        EventAttendee::class,
+        'user_id',     // Foreign key on EventAttendee
+        'id',          // Foreign key on Event
+        'id',          // Local key on User
+        'event_id'     // Local key on EventAttendee
+    );
+}
 }

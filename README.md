@@ -12,11 +12,13 @@ A Laravel-based web platform that connects event organizers with volunteers.
 ### Organizer
 - Create and manage events
 - Edit and delete own events
+- See their created events (dashboard)
 - View participants (volunteers)
 
 ### Volunteer
 - Join events
 - Track participation
+- See own events (dashboard)
 
 ## 🗄️ Database Structure
 

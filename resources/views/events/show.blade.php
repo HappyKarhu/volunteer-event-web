@@ -150,7 +150,12 @@
     {{-- Authentication Modal --}}
     <div 
             x-show="showAuthModal"
-            x-transition
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         >
         <div 
@@ -168,17 +173,17 @@
             <div class="flex gap-3">
                 <a href="{{ route('login') }}" 
                 class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
-                    bg-white text-gray-800 hover:bg-emerald-500">
+                    bg-emerald-600 text-white hover:bg-amber-500">
                     Login
                 </a>
 
                 <a href="{{ route('register') }}" 
-                class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
-                    bg-white text-gray-800 hover:bg-emerald-500">
+                class="inline-flex items-center gap-2 px-4 py-2 rounded shadow border-2 border-emerald-600 text-emerald-600 
+                         hover:bg-amber-500 hover:text-white transition transform hover:scale-105 cursor-pointer">
                     Register
                 </a>
             </div>
-
+            
             <button 
                 @click="showAuthModal = false"
                 class="mt-4 text-sm text-gray-500 underline w-full">

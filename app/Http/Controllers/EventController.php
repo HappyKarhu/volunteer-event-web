@@ -56,7 +56,7 @@ class EventController extends Controller
         'responsibilities' => 'nullable|string',
         'bring_wear' => 'nullable|string',
         'is_free' => 'required|boolean',
-        'price' => 'nullable|numeric|min:0|required_if:is_free,false',
+        'price' => 'nullable|numeric|min:0|required_if:is_free,1',
         'status' => 'required|in:draft,published,cancelled',
     ]);
 
@@ -70,8 +70,10 @@ class EventController extends Controller
 
     // Handle photo upload
     if ($request->hasFile('photo')) {
-        $path = $request->file('photo')->store('events', 'public');
-        $validated['photo'] = $path;
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/events'), $filename);
+        $validated['photo'] = $filename;
     }
 
     // Enforce FREE vs PRICE
@@ -84,13 +86,14 @@ class EventController extends Controller
         $validated['capacity'] = null;
     }
 
-    Event::create([
+    $event = Event::create([
         ...$validated,
         'organizer_id' => auth()->id(),
     ]);
 
-    return redirect()->route('events.index')->with('success', 'Event created successfully!');
-}
+    return redirect()->route('events.show', $event)
+        ->with('success', 'Event created successfully!');
+    }
 
     /**
      * @desc Display the specified event
@@ -177,4 +180,6 @@ class EventController extends Controller
 
         return redirect()->route('events.index');
     }
+
+    
 }

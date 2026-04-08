@@ -11,9 +11,11 @@
             $labelStyle = "block text-sm font-medium text-gray-700 mb-1";           
         @endphp
 
+        
         <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 mt-6">
             @csrf
-
+            <div x-data="{ showErrors: true }" 
+            x-init="setTimeout(() => showErrors = false, 5000)">
             {{-- Basic Info --}}
             <div class="{{ $sectionStyle }}">
                 <h2 class="text-lg font-semibold text-emerald-600">Basic Information</h2>
@@ -26,6 +28,15 @@
                         :value="old('title')" />
                 </div>
 
+                {{-- Title Error Message --}}
+                @error('title')
+                    <p x-show="showErrors" 
+                    x-transition 
+                    class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
+
                 <div>
                     <x-inputs.text-area 
                         name="description" 
@@ -36,6 +47,15 @@
                     >
                         {{ old('description') }}
                     </x-inputs.text-area>
+                    {{-- Description error --}}
+                    @error('description')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
                 </div>
             </div>
 
@@ -53,6 +73,14 @@
                     >
                         {{ old('responsibilities') }}
                     </x-inputs.text-area>
+                    {{-- Responsibilities error --}}
+                    @error('responsibilities')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -61,15 +89,31 @@
                         label="Requirements"
                         placeholder="List any requirements for participants."
                         :value="old('requirements')" />
+
+                    {{-- Requirements error --}}
+                    @error('requirements')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 
-
                 <div>
                     <x-inputs.text
                         name="bring_wear"
                         label="What to Bring/Wear"
                         placeholder="List what participants should bring or wear."
                         :value="old('bring_wear')" />
+                    {{-- Bring/Wear error --}}
+                    @error('bring_wear')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
             </div>
 
@@ -80,11 +124,27 @@
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="{{ $labelStyle }}">Start Date</label>
-                        <input type="date" name="start_date" class="{{ $inputStyle }}">
+                        <input type="date" name="start_date" class="{{ $inputStyle }}" value="{{ old('start_date') }}">
+                        {{-- Start date error --}}
+                        @error('start_date')
+                            <p x-show="showErrors" 
+                            x-transition 
+                            class="text-red-500 text-sm mt-1">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </div>
                     <div>
                         <label class="{{ $labelStyle }}">End Date</label>
-                        <input type="date" name="end_date" class="{{ $inputStyle }}">
+                        <input type="date" name="end_date" class="{{ $inputStyle }}" value="{{ old('end_date') }}">
+                        {{-- End date error --}}
+                        @error('end_date')
+                            <p x-show="showErrors" 
+                            x-transition 
+                            class="text-red-500 text-sm mt-1">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </div>
                 </div>
 
@@ -94,6 +154,15 @@
                         label="Location"
                         placeholder="Event location"
                         :value="old('location')" />
+                    {{-- Location error --}}
+                    @error('location')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
                 </div>
     
             </div>
@@ -110,21 +179,33 @@
 
                 <div x-show="!isFree" x-transition>
                     <label class="{{ $labelStyle }}">Price (€)</label>
-                    <input type="number" step="0.01" name="price" class="{{ $inputStyle }}">
+                    <input type="number" step="0.01" name="price" class="{{ $inputStyle }}" value="{{ old('price') }}">
+                    {{-- Price error --}}
+                    @error('price')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
             </div>
 
             {{-- Event Type --}}
-            <div class="grid md:grid-cols-2 gap-4">
+            <div x-data="{ type: '{{ old('type', 'simple') }}' }" class="grid md:grid-cols-2 gap-4">
 
                 {{-- Simple Event --}}
-                <label class="cursor-pointer border rounded-xl p-4 hover:border-emerald-500 transition block">
+                <label 
+                    @click="type = 'simple'"
+                    :class="type === 'simple' ? 'border-emerald-600 bg-emerald-50' : 'border-gray-300'"
+                    class="cursor-pointer border rounded-xl p-4 hover:border-emerald-500 transition block"
+                >
                     <input 
                         type="radio" 
                         name="type" 
                         value="simple" 
                         class="hidden"
-                        {{ old('type') == 'simple' ? 'checked' : '' }}
+                        x-model="type"
                     >
 
                     <div class="flex items-start gap-3">
@@ -139,13 +220,17 @@
                 </label>
 
                 {{-- Sectioned Event --}}
-                <label class="cursor-pointer border rounded-xl p-4 hover:border-emerald-500 transition block">
+                <label 
+                    @click="type = 'sectioned'"
+                    :class="type === 'sectioned' ? 'border-emerald-600 bg-emerald-50' : 'border-gray-300'"
+                    class="cursor-pointer border rounded-xl p-4 hover:border-emerald-500 transition block"
+                >
                     <input 
                         type="radio" 
                         name="type" 
                         value="sectioned" 
                         class="hidden"
-                        {{ old('type') == 'sectioned' ? 'checked' : '' }}
+                        x-model="type"
                     >
 
                     <div class="flex items-start gap-3">
@@ -159,13 +244,6 @@
                     </div>
                 </label>
 
-                <div>
-                    <label class="{{ $labelStyle }}">Event Type</label>
-                    <select name="type" class="{{ $inputStyle }}">
-                        <option value="simple">Simple</option>
-                        <option value="sectioned">Sectioned</option>
-                    </select>
-                </div>
 
                 <div>
                     <x-inputs.text
@@ -174,6 +252,14 @@
                         type="number"
                         placeholder="Maximum number of participants."
                         :value="old('capacity')" />
+                        {{-- Capacity error --}}
+                        @error('capacity')
+                            <p x-show="showErrors" 
+                            x-transition 
+                            class="text-red-500 text-sm mt-1">
+                                {{ $message }}
+                            </p>
+                        @enderror
                 </div>
     
             </div>
@@ -189,20 +275,44 @@
                         placeholder="e.g. volunteering, environment, cleanup"
                         :value="old('tags')" />
                     <p class="text-gray-500 text-sm mt-1">Separate tags with commas</p>
+                    {{-- Tags error --}}
+                    @error('tags')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
                     <label class="{{ $labelStyle }}">Status</label>
                     <select name="status" class="{{ $inputStyle }}">
-                        <option value="draft">Draft</option>
-                        <option value="published">Published</option>
-                        <option value="cancelled">Cancelled</option>
+                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                        <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
+                    {{-- Status error --}}
+                    @error('status')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
                     <label class="{{ $labelStyle }}">Event Image</label>
                     <input type="file" name="photo" class="w-full text-gray-700">
+                    {{-- Photo error --}}
+                    @error('photo')
+                        <p x-show="showErrors" 
+                        x-transition 
+                        class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
             </div>
 
@@ -212,6 +322,7 @@
                     Create Event
                 </button>
             </div>
+        </div>
         </form>
     </div>
 </x-layout>

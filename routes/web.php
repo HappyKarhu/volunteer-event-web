@@ -53,5 +53,4 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
-Route::middleware(['auth', 'role:volunteer'])->post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
 require __DIR__.'/auth.php';

@@ -1,4 +1,6 @@
 <x-layout>
+<div x-data="{ showAuthModal: false }"> 
+
     <div class="container mx-auto mt-10 px-5">
         {{-- Event Header --}}
         <div class="flex flex-col md:flex-row gap-6 mb-6">
@@ -105,23 +107,34 @@
             </div>
         </div>
 
-        @if($canApply)
-            <form action="{{ route('events.apply', $event) }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
-                        bg-emerald-600 text-white hover:bg-amber-500">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    Apply to Event
-                </button>
-            </form>
-        @else
-            @auth
-                <p class="text-gray-500 text-sm">Only volunteers can apply for this event.</p>
+        {{-- Apply Button --}}
+        @guest
+            <button 
+                @click="showAuthModal = true"
+                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow
+                    bg-emerald-600 text-white hover:bg-amber-500">
+                <i class="fa-solid fa-paper-plane"></i>
+                Apply to Event
+            </button>
+        @endguest
+
+        @auth
+            @if(auth()->user()->role === 'volunteer')
+                <form action="{{ route('events.apply', $event) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow
+                            bg-emerald-600 text-white hover:bg-amber-500">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Apply to Event
+                    </button>
+                </form>
             @else
-                <p class="text-gray-500 text-sm">Login as a volunteer to apply for this event.</p>
-            @endauth
-        @endif
+                <p class="text-gray-500 text-sm">
+                    Only volunteers can apply for this event.
+                </p>
+            @endif
+        @endauth
 
         {{-- Back Button --}}
         <div class="mt-8">
@@ -133,4 +146,46 @@
             </a>
         </div>
     </div>
+
+    {{-- Authentication Modal --}}
+    <div 
+            x-show="showAuthModal"
+            x-transition
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        >
+        <div 
+            @click.away="showAuthModal = false"
+            class="bg-emerald-50 rounded-2xl p-6 w-full max-w-md shadow-lg"
+        >
+            <h2 class="text-xl font-semibold mb-3">
+                You need to be logged in
+            </h2>
+
+            <p class="text-gray-600 mb-4">
+                To apply for events, please sign in as a volunteer.
+            </p>
+
+            <div class="flex gap-3">
+                <a href="{{ route('login') }}" 
+                class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
+                    bg-white text-gray-800 hover:bg-emerald-500">
+                    Login
+                </a>
+
+                <a href="{{ route('register') }}" 
+                class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
+                    bg-white text-gray-800 hover:bg-emerald-500">
+                    Register
+                </a>
+            </div>
+
+            <button 
+                @click="showAuthModal = false"
+                class="mt-4 text-sm text-gray-500 underline w-full">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+</div>
 </x-layout>

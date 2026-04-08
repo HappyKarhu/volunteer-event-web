@@ -55,7 +55,24 @@
             @if($events->count())
                 <div class="grid md:grid-cols-2 gap-4">
                     @foreach($events as $event)
-                        <x-event-card :event="$event" />
+                        <div class="relative">
+                            <x-event-card :event="$event" />
+
+                            {{-- Delete Button --}}
+                            <form action="{{ route('events.destroy', $event) }}" 
+                                method="POST"
+                                class="absolute top-2 right-2"
+                                onsubmit="return confirm('Are you sure you want to delete this event?')">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                    class="px-3 py-1 text-sm rounded-lg border border-red-400 text-red-600 
+                                        bg-white hover:bg-red-50 hover:border-red-500 transition shadow">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     @endforeach
                 </div>
             @else

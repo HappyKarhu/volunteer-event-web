@@ -4,9 +4,9 @@
     
     {{-- Event Photo --}}
     @if($event->photo)
-        <img src="{{ asset('images/events/' . $event->photo) }}" 
-             alt="{{ $event->title }}" 
-             class="w-full h-36 object-cover rounded-t mb-3">
+        <img src="{{ asset('storage/' . $event->photo) }}" 
+            alt="{{ $event->title }}" 
+            class="w-full h-36 object-cover rounded-t mb-3">
     @endif
 
     {{-- Content --}}

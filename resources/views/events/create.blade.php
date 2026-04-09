@@ -285,6 +285,7 @@
                     @enderror
                 </div>
 
+                {{-- Status --}}
                 <div>
                     <label class="{{ $labelStyle }}">Status</label>
                     <select name="status" class="{{ $inputStyle }}">
@@ -292,7 +293,7 @@
                         <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
                         <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
-                    {{-- Status error --}}
+                    
                     @error('status')
                         <p x-show="showErrors" 
                         x-transition 
@@ -302,19 +303,13 @@
                     @enderror
                 </div>
 
+                {{-- Photo --}}
+
                 <div>
                     <label class="{{ $labelStyle }}">Event Image</label>
-                    <input type="file" name="photo" class="w-full text-gray-700">
-                    {{-- Photo error --}}
-                    @error('photo')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
+                    <input type="file" name="photo" id="event-photo" class="w-full text-gray-700" @change="eventPreview = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" x-data="{ eventPreview: null }">
+
                 </div>
-            </div>
 
             {{-- Submit --}}
             <div class="pt-4">

@@ -4,11 +4,10 @@
     <div class="container mx-auto mt-10 px-5">
         {{-- Event Header --}}
         <div class="flex flex-col md:flex-row gap-6 mb-6">
-            @if($event->photo)
-                <img src="{{ asset('images/events/' . $event->photo) }}" 
-                     alt="{{ $event->title }}" 
-                     class="w-full md:w-1/3 h-64 object-cover rounded shadow">
-            @endif
+           
+            <img src="{{ $event->photo ? asset('storage/' . $event->photo) : asset('storage/events/volunteerio-default.png') }}"
+                alt="{{ $event->title }}" 
+                class="w-full md:w-1/3 h-64 object-cover rounded shadow">
 
             <div class="flex-1">
                 <h1 class="text-3xl font-bold mb-3">{{ $event->title }}</h1>
@@ -82,15 +81,9 @@
         <div class="mb-6 p-4 border rounded shadow bg-white">
             <h2 class="text-2xl font-semibold mb-2">Organizer</h2>
             <div class="flex items-center gap-4">
-                @if($event->organizer->logo)
-                  <img src="{{ asset('images/logos/' . $event->organizer->logo) }}" 
+                  <img src="{{ $event->organizer->logo_url }}" 
                     alt="{{ $event->organizer->name }}" 
                     class="w-16 h-16 object-contain rounded-full">
-                @else
-                  <img src="{{ asset('images/avatars/default-avatar.png') }}" 
-                  alt="{{ $event->organizer->name }}" 
-                  class="w-16 h-16 object-contain rounded-full">
-                @endif
                 <div>
                     <a href="{{ route('users.show', $event->organizer) }}" 
                        class="text-xl font-semibold text-emerald-600 hover:text-amber-500">

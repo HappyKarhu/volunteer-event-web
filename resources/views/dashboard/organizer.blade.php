@@ -6,10 +6,9 @@
             
             {{-- Left Column: Profile Info --}}
             <div class="md:w-1/3 p-6 bg-gray-50 rounded-xl border border-gray-100 text-center space-y-4">
-                <img 
-                    src="{{ $user->avatar ? asset('storage/' . $user->logos) : asset('images/logos/logo-greenorg.png') }}"
-                    class="w-24 h-24 rounded-full mx-auto"
-                >
+                <img src="{{ $user->logo_url }}" 
+                    alt="{{ $user->name }}" 
+                    class="w-24 h-24 rounded-full mx-auto">
                 <h2 class="text-xl font-semibold">{{ $user->name }}</h2>
                 <p class="text-gray-500 text-sm">{{ $user->email }}</p>
             </div>
@@ -67,8 +66,12 @@
                                 @method('DELETE')
 
                                 <button type="submit"
-                                    class="px-3 py-1 text-sm rounded-lg border border-red-400 text-red-600 
-                                        bg-white hover:bg-red-50 hover:border-red-500 transition shadow">
+                                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl shadow transition 
+                                        transform hover:scale-105 hover:shadow-lg
+                                        bg-white text-red-600 border border-red-300 
+                                        hover:bg-red-50 hover:border-red-500">
+
+                                    <i class="fa-solid fa-trash"></i>
                                     Delete
                                 </button>
                             </form>

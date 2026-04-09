@@ -24,10 +24,9 @@
 
             {{-- Left Column: Profile Info --}}
             <div class="md:w-1/3 p-6 bg-gray-50 rounded-xl border border-gray-100 text-center space-y-3">
-                <img 
-                    src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatars/default-avatar.png') }}"
-                    class="w-24 h-24 rounded-full mx-auto"
-                >
+                <img src="{{ $user->avatar_url }}" 
+                    alt="{{ $user->name }}" 
+                    class="w-24 h-24 rounded-full mx-auto">
                 <h2 class="text-xl font-semibold">{{ $user->name }}</h2>
                 <p class="text-gray-500 text-sm">{{ $user->email }}</p>
             </div>

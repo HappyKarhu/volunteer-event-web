@@ -93,4 +93,37 @@ class User extends Authenticatable
             'event_id'     // Local key on EventAttendee
         );
     }
+
+    /**
+     * Get the organizer logo URL, or default if missing
+     */
+    public function getLogoUrlAttribute(): string
+    {
+        // If logo exists, use storage path; otherwise default-logo.png
+        if ($this->logo) {
+            return asset('storage/' . $this->logo);
+        }
+
+        return asset('images/logos/default-logo.png');
+    }
+
+    /**
+     * Get the volunteer avatar URL, or default if missing
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->avatar) {
+            return asset('storage/' . $this->avatar);
+        }
+
+        return asset('images/avatars/default-avatar.png');
+    }
+
+    /**
+     * Unified accessor for profile image
+     */
+    public function getProfileImageUrlAttribute(): string
+    {
+        return $this->isOrganizer() ? $this->logo_url : $this->avatar_url;
+    }
 }

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'company_name' => 'GreenOrg',
             'phone' => '123-456-7890',
             'website' => 'https://greenorg.com',
-            'logo' => 'logo-greenorg.png',
+            'logo' => 'logos/logo-greenorg.png',
             'bio' => null,
         ],
         [
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             'company_name' => 'Blue Events',
             'phone' => '987-654-3210',
             'website' => 'https://blueevents.com',
-            'logo' => 'logo-blueevents.png',
+            'logo' => 'logos/logo-blueevents.png',
             'bio' => null,
         ],
 
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'company_name' => null,
             'phone' => null,
             'website' => null,
-            'logo' => 'default-avatar.png',
+            'logo' => 'avatars/default-avatar.png',
             'bio' => 'Passionate about environmental causes and community work.',
         ],
         [
@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             'company_name' => null,
             'phone' => null,
             'website' => null,
-            'logo' => 'avatar.jpg',
+            'logo' => 'avatars/avatar.jpg',
             'bio' => 'Enjoys teaching children and supporting local projects.',
         ],
 ];

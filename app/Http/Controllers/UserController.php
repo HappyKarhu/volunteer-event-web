@@ -25,6 +25,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'nullable|in:organizer,volunteer',
+            'photo' => 'nullable|file|image|max:2048',
         ]);
 
         try {
@@ -35,12 +36,21 @@ class UserController extends Controller
                 ['role' => $validated['role'] ?? 'volunteer']
             );
 
+            // Handle photo upload or defaults
+            if ($request->hasFile('photo')) {
+                $path = $request->file('photo')->store('public/' . ($validated['role'] === 'organizer' ? 'logos' : 'avatars'));
+                $photoPath = str_replace('public/', '', $path); // store relative path
+            } else {
+                $photoPath = $validated['role'] === 'organizer' ? 'logos/default-logo.png' : 'avatars/default-avatar.png';
+            }
+
             // Create user in database
             $user = User::create([
                 'firebase_uid' => $firebaseUser['uid'],
                 'full_name' => $validated['full_name'],
                 'email' => $validated['email'],
                 'role' => $validated['role'] ?? 'volunteer',
+                'avatar' => $photoPath,
             ]);
 
             return response()->json([
@@ -89,6 +99,11 @@ class UserController extends Controller
             ]);
 
             $user = $request->user();
+            
+            if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('public/avatars');
+            $validated['avatar'] = str_replace('public/', '', $path);
+        }
             $user->update($validated);
 
             return response()->json([

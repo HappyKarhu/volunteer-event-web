@@ -56,7 +56,16 @@ class EventController extends Controller
         'responsibilities' => 'nullable|string',
         'bring_wear' => 'nullable|string',
         'is_free' => 'required|boolean',
-        'price' => 'nullable|numeric|min:0|required_if:is_free,1',
+        'price' => [
+                        'nullable',
+                        'numeric',
+                        'min:0',
+                        function ($attribute, $value, $fail) use ($request) {
+                            if (!$request->is_free && is_null($value)) {
+                                $fail('Price is required when event is not free.');
+                            }
+                        },
+                    ],
         'status' => 'required|in:draft,published,cancelled',
     ]);
 
@@ -69,11 +78,11 @@ class EventController extends Controller
     }
 
     // Handle photo upload
-    if ($request->hasFile('photo')) {
-        $file = $request->file('photo');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('images/events'), $filename);
-        $validated['photo'] = $filename;
+    if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+        $path = $request->file('photo')->store('events', 'public');
+        $validated['photo'] = $path;
+    } else {
+        $validated['photo'] = 'events/volunteerio-default.png';
     }
 
     // Enforce FREE vs PRICE
@@ -102,7 +111,7 @@ class EventController extends Controller
     public function show(Event $event): View
     {
         $canApply = auth()->check() && auth()->user()->role === 'volunteer';
-    return view('events.show', compact('event', 'canApply'));;
+    return view('events.show', compact('event', 'canApply'));
     }
 
     /**
@@ -141,13 +150,24 @@ class EventController extends Controller
             'responsibilities' => 'nullable|string',
             'bring_wear' => 'nullable|string',
             'is_free' => 'required|boolean',
-            'price' => 'nullable|numeric|min:0|required_if:is_free,false',
+            'price' => [
+                            'nullable',
+                            'numeric',
+                            'min:0',
+                            function ($attribute, $value, $fail) use ($request) {
+                                if (!$request->is_free && is_null($value)) {
+                                    $fail('Price is required when event is not free.');
+                                }
+                            },
+                        ],
             'status' => 'required|in:draft,published,cancelled',
         ]);
 
-        if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             $path = $request->file('photo')->store('events', 'public');
             $validated['photo'] = $path;
+        } elseif (!$event->photo ?? true) {
+            $validated['photo'] = 'events/volunteerio-default.png';
         }
 
         if ($validated['is_free']) {

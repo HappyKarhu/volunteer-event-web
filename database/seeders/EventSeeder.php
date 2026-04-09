@@ -29,7 +29,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Comfortable clothes, gloves, water bottle",
                 "is_free" => true,
                 "price" => null,
-                "photo" => "beach-cleaning.jpg",
+                "photo" => "events/beach-cleaning.jpg",
                 "status" => "published",
             ],
             [
@@ -47,7 +47,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Comfortable clothes, gloves, water bottle",
                 "is_free" => true,
                 "price" => null,
-                "photo" => "tree-planting.jpg",
+                "photo" => "events/tree-planting.jpg",
                 "status" => "published",
             ],
             [
@@ -65,7 +65,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Comfortable shoes, gloves, hat",
                 "is_free" => false,
                 "price" => 3.00,
-                "photo" => "gardening.jpg",
+                "photo" => "events/gardening.jpg",
                 "status" => "published",
             ],
             [
@@ -83,7 +83,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "No specific attire required, but comfortable clothing recommended",       
                 "is_free" => true,
                 "price" => null,
-                "photo" => "environment-workshop.jpg",
+                "photo" => "events/environment-workshop.jpg",
                 "status" => "published",
             ],
             [
@@ -101,7 +101,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Comfortable clothing, closed-toe shoes",
                 "is_free" => false,
                 "price" => 10.00,
-                "photo" => "cooking-workshop.jpg",
+                "photo" => "events/cooking-workshop.jpg",
                 "status" => "published"
             ],
             [
@@ -119,7 +119,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Waterproof boots, comfortable clothes, gloves provided",
                 "is_free" => true,
                 "price" => null,
-                "photo" => "river-cleanup.jpg",
+                "photo" => "events/river-cleanup.jpg",
                 "status" => "published",
             ],
             [
@@ -137,7 +137,7 @@ class EventSeeder extends Seeder
                 "bring_wear" => "Comfortable clothing, gloves recommended",
                 "is_free" => false,
                 "price" => 5.00,
-                "photo" => "urban-gardening.jpg", 
+                "photo" => "events/urban-gardening.jpg", 
                 "status" => "published",
             ],
         ];

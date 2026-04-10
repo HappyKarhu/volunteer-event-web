@@ -84,7 +84,7 @@
                             :value="$user->bio"
                             placeholder="Tell organizers about yourself..."
                             rows="3"
-                        />{{ $user->bio }}</text-area>
+                        />
                     </div>
 
                     {{-- Skills --}}
@@ -95,7 +95,7 @@
                             :value="$user->skills"
                             placeholder="List your skills or interests..."
                             rows="3"
-                        />{{ $user->skills }}</text-area>
+                        />
                     </div>
 
                     {{-- Avatar --}}

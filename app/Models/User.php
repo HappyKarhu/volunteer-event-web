@@ -27,6 +27,8 @@ class User extends Authenticatable
         'logo',
         // Volunteer-specific
         'bio',
+        'skills',
+        'avatar',
     ];
 
     /**

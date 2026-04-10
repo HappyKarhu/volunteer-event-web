@@ -32,17 +32,25 @@
                   My Dashboard
                 </x-button-link>
 
+                <form method="POST" action="{{ route('logout') }}" class="inline-flex">
+                    @csrf
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded hover:shadow-md transition duration-300 inline-flex items-center">
+                        <i class="fa fa-sign-out-alt mr-1"></i>
+                        Log Out
+                    </button>
+                </form>
+
             @endauth
 
             <!--Public navigation links-->
             @guest
-                <x-nav-link :url="url('/login')" :active="request()->is('login')" icon="user">
+                <x-button-link :url="url('/login')" icon="user" bgClass="bg-emerald-50" hoverClass="hover:bg-emerald-100" textClass="text-emerald-700">
                     Login
-                </x-nav-link>
+                </x-button-link>
 
-                <x-nav-link :url="url('/register')" :active="request()->is('register')" icon="user-plus">
+                <x-button-link :url="url('/register')" icon="user-plus">
                     Register
-                </x-nav-link>
+                </x-button-link>
             @endguest
         </nav>
 
@@ -85,19 +93,27 @@
             <x-button-link mobile="true" block="true" :url="route('dashboard')" :active="request()->is('dashboard')" icon="clipboard-user">
                 My Dashboard
             </x-button-link>
+
+            <form method="POST" action="{{ route('logout') }}" class="block">
+                @csrf
+                <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded hover:shadow-md transition duration-300 block w-full text-left">
+                    <i class="fa fa-sign-out-alt mr-1"></i>
+                    Log Out
+                </button>
+            </form>
   
 
         @endauth
 
         <!--Public navigation links-->
         @guest
-            <x-nav-link mobile="true" :url="url('/login')" :active="request()->is('login')" icon="user">
+            <x-button-link mobile="true" block="true" :url="url('/login')" icon="user" bgClass="bg-emerald-50" hoverClass="hover:bg-emerald-100" textClass="text-emerald-700">
                 Login
-            </x-nav-link>
+            </x-button-link>
 
-            <x-nav-link mobile="true" :url="url('/register')" :active="request()->is('register')">
+            <x-button-link mobile="true" block="true" :url="url('/register')" icon="user-plus">
                 Register
-            </x-nav-link>
+            </x-button-link>
         @endguest
     </nav>
 </header>

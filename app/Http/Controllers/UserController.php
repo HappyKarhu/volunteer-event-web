@@ -21,7 +21,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'nullable|in:organizer,volunteer',
@@ -47,7 +47,7 @@ class UserController extends Controller
             // Create user in database
             $user = User::create([
                 'firebase_uid' => $firebaseUser['uid'],
-                'full_name' => $validated['full_name'],
+                'name' => $validated['name'],
                 'email' => $validated['email'],
                 'role' => $validated['role'] ?? 'volunteer',
                 'avatar' => $photoPath,
@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         try {
             $validated = $request->validate([
-                'full_name' => 'nullable|string|max:255',
+                'name' => 'nullable|string|max:255',
                 'avatar' => 'nullable|url',
                 'city' => 'nullable|string|max:255',
                 'country' => 'nullable|string|max:255',

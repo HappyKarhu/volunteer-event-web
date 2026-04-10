@@ -38,6 +38,7 @@
                 </div>
 
                 {{-- Bio Preview --}}
+                <p class="text-emerald-600 text-sm">About me</p>
                 <div class="text-sm text-gray-600">
                     @if($user->bio)
                         <p>{{ Str::limit($user->bio, 100) }}</p>
@@ -47,6 +48,7 @@
                 </div>
 
                 {{-- Skills Preview --}}
+                <p class="text-emerald-600 text-sm">My skills</p>
                 <div class="text-sm text-gray-600">
                     @if($user->skills)
                         <div class="flex flex-wrap gap-2 justify-center">
@@ -66,6 +68,11 @@
             <div class="md:col-span-2 p-6 bg-gray-50 rounded-xl border space-y-4">
 
                 <h2 class="text-lg font-semibold text-emerald-600">Edit Your Profile</h2>
+                @if (session('status') === 'profile-updated')
+                    <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        Profile updated successfully.
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-4">
                     @csrf
@@ -93,7 +100,7 @@
                             name="skills"
                             label="Skills"
                             :value="$user->skills"
-                            placeholder="List your skills or interests..."
+                            placeholder="List your skills separated by commas (e.g. First Aid, Event Planning, Social Media)"
                             rows="3"
                         />
                     </div>

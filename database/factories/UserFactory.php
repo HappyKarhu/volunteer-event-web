@@ -62,6 +62,7 @@ class UserFactory extends Factory
             'role' => 'volunteer',
             'company_name' => null,
             'bio' => fake()->sentence(),
+            'skills' => fake()->words(3, true),
         ]);
     }
 
@@ -74,6 +75,7 @@ class UserFactory extends Factory
             'name' => 'Test Organizer',
             'email' => 'organizer@test.com',
             'role' => 'organizer',
+            'bio' => 'This is a test organizer account.',
             'password' => Hash::make('password'),
         ]);
     }

@@ -84,6 +84,11 @@
             <div class="md:col-span-2 p-6 bg-gray-50 rounded-xl border space-y-4">
 
                 <h2 class="text-lg font-semibold text-emerald-600">Edit Organization Profile</h2>
+                @if (session('status') === 'profile-updated')
+                    <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        Profile updated successfully.
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-4">
                     @csrf

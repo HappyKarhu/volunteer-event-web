@@ -8,7 +8,7 @@
         {{-- Email Address --}}
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input 
+            <x-inputs.text 
                 id="email" 
                 class="block mt-1 w-full" 
                 type="email" 
@@ -24,7 +24,7 @@
         {{-- Password --}}
         <div>
             <x-input-label for="password" :value="__('Password')" />
-            <x-text-input 
+            <x-inputs.text 
                 id="password" 
                 class="block mt-1 w-full" 
                 type="password" 

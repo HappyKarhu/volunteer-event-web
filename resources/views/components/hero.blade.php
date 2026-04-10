@@ -7,13 +7,13 @@
   <div class="container mx-auto text-center z-10">
     <h2 class="text-5xl text-white font-bold mb-8">{{ $title }}</h2>
     <form class="block mx-5 md:mx-auto md:flex md:justify-center md:space-x-2">
-      <input
+      <x-inputs.text
         type="text"
         name="keywords"
         placeholder="Keywords"
         class="w-full md:w-72 px-4 py-3 mb-3 md:mb-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 shadow-sm focus:outline-none"
       />
-      <input
+      <x-inputs.text
         type="text"
         name="location"
         placeholder="Location"

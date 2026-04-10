@@ -165,11 +165,35 @@
         <div class="p-5 bg-gray-50 rounded-xl border">
             <h2 class="text-lg font-semibold text-emerald-600 mb-4">Your Events</h2>
 
+            @if (session('success'))
+                <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             @if($events->count())
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($events as $event)
-                        <div class="relative">
+                        <div class="relative {{ $event->status === 'cancelled' ? 'opacity-60' : '' }}">
                             <x-event-card :event="$event" />
+
+                            <div class="absolute bottom-2 right-2">
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full
+                                    @if($event->status === 'published') bg-emerald-50 text-emerald-600
+                                    @elseif($event->status === 'draft') bg-amber-50 text-amber-600
+                                    @elseif($event->status === 'cancelled') bg-red-50 text-red-600
+                                    @endif
+                                ">
+                                    {{ ucfirst($event->status) }}
+                                </span>
+                            </div>
+
+                            <div class="absolute top-2 left-2">
+                                <a href="{{ route('events.edit', $event) }}"
+                                    class="px-3 py-2 rounded-xl shadow bg-white text-emerald-600 border border-emerald-300 hover:bg-emerald-50">
+                                    Edit
+                                </a>
+                            </div>
 
                             <form action="{{ route('events.destroy', $event) }}" 
                                 method="POST"

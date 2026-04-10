@@ -18,7 +18,6 @@
                 autofocus 
                 autocomplete="username" 
             />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         {{-- Password --}}
@@ -32,7 +31,6 @@
                 required 
                 autocomplete="current-password" 
             />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         {{-- Remember Me --}}

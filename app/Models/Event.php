@@ -25,6 +25,8 @@ class Event extends Model
         'location',
         'tags',
         'requirements',
+        'responsibilities',
+        'bring_wear',
         'is_free',
         'price',
         'status',

@@ -2,7 +2,8 @@
     'name',
     'label' => null,
     'value' => '',
-    'placeholder' => ''
+    'placeholder' => '',
+    'type' => 'text',
 ])
 
 <div>
@@ -11,7 +12,7 @@
     </label>
 
     <input 
-        type="text"
+        type="{{ $type }}"
         name="{{ $name }}"
         value="{{ old($name, $value) }}"
         placeholder="{{ $placeholder }}"

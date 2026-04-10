@@ -120,6 +120,10 @@ class EventController extends Controller
      */
     public function edit(Event $event): View
     {
+        if ($event->organizer_id !== auth()->id()) {
+            abort(403, 'You do not own this event');
+        }
+
         return view('events.edit', compact('event'));
     }
 
@@ -166,7 +170,7 @@ class EventController extends Controller
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             $path = $request->file('photo')->store('events', 'public');
             $validated['photo'] = $path;
-        } elseif (!$event->photo ?? true) {
+        } elseif (!$event->photo) {
             $validated['photo'] = 'events/volunteerio-default.png';
         }
 
@@ -184,7 +188,7 @@ class EventController extends Controller
 
         $event->update($validated);
 
-        return redirect()->route('events.show', $event);
+        return redirect()->route('dashboard')->with('success', 'Event updated successfully.');
     }       
     /**
      * @desc Remove the specified event from storage
@@ -198,7 +202,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return redirect()->route('events.index');
+        return redirect()->route('dashboard')->with('success', 'Event deleted successfully.');
     }
 
     

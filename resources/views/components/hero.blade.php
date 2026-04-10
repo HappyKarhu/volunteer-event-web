@@ -1,11 +1,11 @@
 @props(['title' => 'Join or create opportunities to help your community'])
 
 <section
-  class="hero relative bg-cover bg-center bg-no-repeat h-72 flex items-center"
+  class="hero relative bg-cover bg-center bg-no-repeat py-12 md:py-20 flex items-center"
 >
   <div class="overlay"></div>
-  <div class="container mx-auto text-center z-10">
-    <h2 class="text-5xl text-white font-bold mb-8">{{ $title }}</h2>
+  <div class="container mx-auto text-center z-10 px-4 md:px-0">
+    <h2 class="text-3xl md:text-5xl text-white font-bold mb-8">{{ $title }}</h2>
     <form class="block mx-5 md:mx-auto md:flex md:justify-center md:space-x-2">
       <x-inputs.text
         type="text"

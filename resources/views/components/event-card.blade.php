@@ -51,7 +51,7 @@
                 Details
             </a>
 
-            {{-- Save/Unsave Button (Volunteers Only) --}}
+            {{-- Save/Unsave Button (Volunteers and Guests Only) --}}
             @auth
                 @if(auth()->user()->isVolunteer())
                     <form action="{{ auth()->user()->savedEvents->contains($event) ? route('events.unsave', $event) : route('events.save', $event) }}" method="POST">
@@ -85,6 +85,7 @@
         </div>
     </div>
 
+    {{-- Save/Unsave Button Guest redirected to login/register --}}
     @guest
         <div
             x-show="showAuthModal"

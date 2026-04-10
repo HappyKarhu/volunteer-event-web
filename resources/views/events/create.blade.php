@@ -28,15 +28,6 @@
                         :value="old('title')" />
                 </div>
 
-                {{-- Title Error Message --}}
-                @error('title')
-                    <p x-show="showErrors" 
-                    x-transition 
-                    class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
-
                 <div>
                     <x-inputs.text-area 
                         name="description" 
@@ -47,14 +38,6 @@
                     >
                         {{ old('description') }}
                     </x-inputs.text-area>
-                    {{-- Description error --}}
-                    @error('description')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
 
                 </div>
             </div>
@@ -73,14 +56,6 @@
                     >
                         {{ old('responsibilities') }}
                     </x-inputs.text-area>
-                    {{-- Responsibilities error --}}
-                    @error('responsibilities')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
                 <div>
@@ -89,15 +64,6 @@
                         label="Requirements"
                         placeholder="List any requirements for participants."
                         :value="old('requirements')" />
-
-                    {{-- Requirements error --}}
-                    @error('requirements')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
                 
                 <div>
@@ -106,14 +72,6 @@
                         label="What to Bring/Wear"
                         placeholder="List what participants should bring or wear."
                         :value="old('bring_wear')" />
-                    {{-- Bring/Wear error --}}
-                    @error('bring_wear')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
             </div>
 
@@ -154,14 +112,6 @@
                         label="Location"
                         placeholder="Event location"
                         :value="old('location')" />
-                    {{-- Location error --}}
-                    @error('location')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
                 </div>
     
@@ -252,14 +202,6 @@
                         type="number"
                         placeholder="Maximum number of participants."
                         :value="old('capacity')" />
-                        {{-- Capacity error --}}
-                        @error('capacity')
-                            <p x-show="showErrors" 
-                            x-transition 
-                            class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
                 </div>
     
             </div>
@@ -275,14 +217,6 @@
                         placeholder="e.g. volunteering, environment, cleanup"
                         :value="old('tags')" />
                     <p class="text-gray-500 text-sm mt-1">Separate tags with commas</p>
-                    {{-- Tags error --}}
-                    @error('tags')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
                 {{-- Status --}}

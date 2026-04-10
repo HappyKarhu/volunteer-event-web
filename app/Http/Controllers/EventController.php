@@ -17,9 +17,45 @@ class EventController extends Controller
     public function index(): View
     {
         $title = 'Available Events';
-        $events = Event::all(); // Fetch all events from the database
+        $status = request('status', 'published');
+        $date = request('date');
+        $search = trim((string) request('search'));
+        $location = trim((string) request('location'));
+        $freeOnly = request()->boolean('free_only');
 
-    return view('events.index', compact('events', 'title'));
+        $events = Event::query()
+            ->when(in_array($status, ['published', 'cancelled'], true), function ($query) use ($status) {
+                $query->where('status', $status);
+            }, function ($query) {
+                $query->where('status', 'published');
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($innerQuery) use ($search) {
+                    $innerQuery->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('tags', 'like', "%{$search}%");
+                });
+            })
+            ->when($location !== '', function ($query) use ($location) {
+                $query->where('location', 'like', "%{$location}%");
+            })
+            ->when($freeOnly, function ($query) {
+                $query->where('is_free', true);
+            })
+            ->when($date === 'upcoming', function ($query) {
+                $query->whereDate('end_date', '>=', now());
+            })
+            ->when($date === 'past', function ($query) {
+                $query->whereDate('end_date', '<', now());
+            })
+            ->when($date === 'this_month', function ($query) {
+                $query->whereBetween('start_date', [now()->startOfMonth(), now()->endOfMonth()]);
+            })
+            ->latest()
+            ->paginate(6)
+            ->withQueryString();
+
+        return view('events.index', compact('events', 'title'));
     }
 
     /**

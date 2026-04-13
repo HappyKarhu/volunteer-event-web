@@ -14,15 +14,15 @@ class UserSeeder extends Seeder
         // Organizers
         [
             'name' => 'Alicia Green',
-            'email' => 'aligreen@example.com',
+            'email' => 'alicgreen@example.com',
             'password' => bcrypt('password123'),
             'role' => 'organizer',
-            'contact_email' => 'contact@greenorg.com',
+            'contact_email' => 'contact@green.org',
             'company_name' => 'GreenOrg',
             'phone' => '123-456-7890',
             'website' => 'https://greenorg.com',
             'logo' => 'logos/logo-greenorg.png',
-            'bio' => null,
+            'bio' => 'GreenOrg is dedicated to organizing community clean-up events and promoting sustainability.',
         ],
         [
             'name' => 'Bob Blue',

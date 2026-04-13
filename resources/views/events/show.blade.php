@@ -2,12 +2,13 @@
 <div x-data="{ showAuthModal: false }"> 
 
     <div class="container mx-auto mt-10 px-5">
+        <div class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-md">
         {{-- Event Header --}}
-        <div class="flex flex-col md:flex-row gap-6 mb-6">
+        <div class="flex flex-col gap-6 border-b border-gray-100 bg-gradient-to-r from-white via-emerald-50 to-amber-50 p-6 md:flex-row md:p-8">
            
             <img src="{{ $event->photo ? asset('storage/' . $event->photo) : asset('storage/events/volunteerio-default.png') }}"
                 alt="{{ $event->title }}" 
-                class="w-full md:w-1/3 h-64 object-cover rounded shadow">
+                class="h-64 w-full rounded-2xl object-cover shadow md:w-1/3">
 
             <div class="flex-1">
                 <h1 class="text-3xl font-bold mb-3">{{ $event->title }}</h1>
@@ -38,105 +39,122 @@
         </div>
 
         {{-- Event Description --}}
-        <div class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">Description</h2>
-            <p class="text-gray-700">{{ $event->description }}</p>
+        <div class="grid gap-6 p-6 md:grid-cols-3 md:p-8">
+        <div class="space-y-6 md:col-span-2">
+        <div class="rounded-2xl border border-gray-100 bg-gray-50 p-6 shadow-sm">
+            <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Description</h2>
+            <p class="whitespace-pre-line leading-7 text-gray-700">{{ $event->description }}</p>
         </div>
 
         @if($event->responsibilities)
-            <div class="mb-6">
-                <h2 class="text-2xl font-semibold mb-2">Responsibilities</h2>
-                <p class="text-gray-700">{{ $event->responsibilities }}</p>
+            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Responsibilities</h2>
+                <p class="whitespace-pre-line leading-7 text-gray-700">{{ $event->responsibilities }}</p>
             </div>
         @endif
 
         @if($event->bring_wear)
-            <div class="mb-6">
-                <h2 class="text-2xl font-semibold mb-2">What to Bring / Wear</h2>
-                <p class="text-gray-700">{{ $event->bring_wear }}</p>
+            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">What to Bring / Wear</h2>
+                <p class="whitespace-pre-line leading-7 text-gray-700">{{ $event->bring_wear }}</p>
             </div>
         @endif
 
         {{-- Requirements --}}
         @if($event->requirements)
-            <div class="mb-6">
-                <h2 class="text-2xl font-semibold mb-2">Requirements</h2>
-                <p class="text-gray-700">{{ $event->requirements }}</p>
+            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Requirements</h2>
+                <p class="whitespace-pre-line leading-7 text-gray-700">{{ $event->requirements }}</p>
             </div>
         @endif
 
         {{-- Tags --}}
         @if($event->tags)
-            <div class="mb-6">
-                <h2 class="text-2xl font-semibold mb-2">Tags</h2>
+            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Tags</h2>
                 <div class="flex flex-wrap gap-2">
                     @foreach(explode(',', $event->tags) as $tag)
-                        <span class="px-3 py-1 bg-gray-200 rounded-full text-sm text-gray-700">{{ trim($tag) }}</span>
+                        <span class="rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-700">{{ trim($tag) }}</span>
                     @endforeach
                 </div>
             </div>
         @endif
+        </div>
 
         {{-- Organizer Info --}}
-        <div class="mb-6 p-4 border rounded shadow bg-white">
-            <h2 class="text-2xl font-semibold mb-2">Organizer</h2>
-            <div class="flex items-center gap-4">
+        <div class="space-y-6">
+        <div class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+            <div class="bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-400 px-5 py-4">
+                <h2 class="text-2xl font-semibold text-white">Organizer</h2>
+            </div>
+            <div class="p-5">
+            <div class="flex items-start gap-4">
                   <img src="{{ $event->organizer->logo_url }}" 
                     alt="{{ $event->organizer->name }}" 
-                    class="w-16 h-16 object-contain rounded-full">
-                <div>
+                    class="h-16 w-16 rounded-full border-4 border-emerald-100 object-cover">
+                <div class="space-y-2">
                     <a href="{{ route('users.show', $event->organizer) }}" 
-                       class="text-xl font-semibold text-emerald-600 hover:text-amber-500">
+                       class="block text-xl font-semibold text-emerald-600 hover:text-amber-500">
                         {{ $event->organizer->name }}
                     </a>
                     @if($event->organizer->company_name)
-                        <p class="text-gray-600 text-sm">{{ $event->organizer->company_name }}</p>
+                        <p class="text-sm text-gray-600">{{ $event->organizer->company_name }}</p>
                     @endif
                     @if($event->organizer->website)
                         <a href="{{ $event->organizer->website }}" target="_blank" 
-                           class="text-sm text-blue-500 hover:underline">{{ $event->organizer->website }}</a>
+                           class="block break-all text-sm text-emerald-600 hover:text-amber-500 hover:underline">{{ $event->organizer->website }}</a>
+                    @endif
+                    @if($event->organizer->contact_email)
+                        <a href="mailto:{{ $event->organizer->contact_email }}"
+                           class="block break-all text-sm text-gray-600 hover:text-emerald-600">
+                            {{ $event->organizer->contact_email }}
+                        </a>
                     @endif
                 </div>
+            </div>
             </div>
         </div>
 
         {{-- Apply Button --}}
-        @guest
-            <button 
-                @click="showAuthModal = true"
-                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow
-                    bg-emerald-600 text-white hover:bg-amber-500">
-                <i class="fa-solid fa-paper-plane"></i>
-                Apply to Event
-            </button>
-        @endguest
+        <div class="rounded-2xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+            @guest
+                <button 
+                    @click="showAuthModal = true"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white shadow transition hover:bg-amber-500">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Apply to Event
+                </button>
+            @endguest
 
-        @auth
-            @if(auth()->user()->role === 'volunteer')
-                <form action="{{ route('events.apply', $event) }}" method="POST">
-                    @csrf
-                    <button type="submit"
-                        class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded shadow
-                            bg-emerald-600 text-white hover:bg-amber-500">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        Apply to Event
-                    </button>
-                </form>
-            @else
-                <p class="text-gray-500 text-sm">
-                    Only volunteers can apply for this event.
-                </p>
-            @endif
-        @endauth
+            @auth
+                @if(auth()->user()->role === 'volunteer')
+                    <form action="{{ route('events.apply', $event) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white shadow transition hover:bg-amber-500">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Apply to Event
+                        </button>
+                    </form>
+                @else
+                    <p class="text-sm text-gray-500">
+                        Only volunteers can apply for this event.
+                    </p>
+                @endif
+            @endauth
+        </div>
+        </div>
+        </div>
 
         {{-- Back Button --}}
-        <div class="mt-8">
+        <div class="border-t border-gray-100 px-6 pb-8 pt-2 md:px-8">
             <a href="{{ route('events.index') }}" 
-            class="inline-flex items-center gap-2 px-4 py-2 rounded shadow transition transform hover:scale-105 hover:shadow-lg
-                    bg-white text-gray-800 hover:bg-emerald-50">
+            class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow transition transform hover:scale-105 hover:bg-emerald-50 hover:shadow-lg
+                    text-gray-800">
                 <span class="text-lg">&larr;</span>
                 <span>Back to Events</span>
             </a>
+        </div>
         </div>
     </div>
 

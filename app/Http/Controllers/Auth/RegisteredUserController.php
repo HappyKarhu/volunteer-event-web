@@ -32,19 +32,32 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:organizer,volunteer'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp','max:2048'], // Optional photo upload
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password, // Will be hashed by User model's $casts
-            'role' => $request->role,
-        ]);
+        $userData = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->password,
+        'role' => $request->role,
+    ];
 
-        event(new Registered($user));
+    if ($request->hasFile('photo')) {
+        $folder = $request->role === 'organizer' ? 'logos' : 'avatars';
+        $photoPath = $request->file('photo')->store($folder, 'public');
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        if ($request->role === 'organizer') {
+            $userData['logo'] = $photoPath;
+        } else {
+            $userData['avatar'] = $photoPath;
+        }
     }
+
+    $user = User::create($userData);
+
+    event(new Registered($user));
+    Auth::login($user);
+
+    return redirect(route('dashboard', absolute: false));
+}
 }

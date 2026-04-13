@@ -31,6 +31,10 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
+        if (! empty($data['website']) && ! preg_match('#^https?://#i', $data['website'])) {
+            $data['website'] = 'https://' . $data['website'];
+        }
+
         $user->name = $data['name'];
         $user->bio = $data['bio'] ?? null;
         $user->skills = $data['skills'] ?? null;

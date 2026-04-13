@@ -1,52 +1,63 @@
 @props(['event'])
 
-<div x-data="{ showAuthModal: false }" class="rounded-lg shadow-md bg-white hover:shadow-lg transition hover:bg-emerald-50 flex flex-col h-full">
+<div x-data="{ showAuthModal: false }" class="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
     
     {{-- Event Photo --}}
     @if($event->photo)
         <img src="{{ asset('storage/' . $event->photo) }}" 
             alt="{{ $event->title }}" 
-            class="w-full h-36 object-cover rounded-t mb-3">
+            class="h-40 w-full object-cover">
     @endif
 
     {{-- Content --}}
-    <div class="flex-1 flex flex-col justify-between p-4">
+    <div class="flex flex-1 flex-col justify-between p-5">
         <div>
+            <div class="mb-3 flex items-start justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600">
+                    {{ $event->is_free ? 'Free Event' : 'Paid Event' }}
+                </p>
+
+                <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                    {{ $event->participantCount() }} joined
+                </span>
+            </div>
+
             {{-- Event Title --}}
-            <h2 class="text-xl font-semibold mb-1 hover:text-amber-500 transition-colors duration-200 cursor-pointer">
+            <h2 class="mb-2 text-xl font-semibold text-gray-900 transition-colors duration-200 hover:text-amber-500">
                 {{ $event->title }}
             </h2>
 
             {{-- Event Dates --}}
-            <p class="text-gray-600 text-sm mb-2">
+            <p class="mb-2 text-sm text-gray-500">
                 {{ $event->start_date->format('M d, Y') }} - {{ $event->end_date->format('M d, Y') }}
             </p>
 
             {{-- Description --}}
-            <p class="text-gray-700 mb-2">{{ Str::limit($event->description, 80) }}</p>
+            <p class="mb-4 text-sm leading-6 text-gray-700">{{ Str::limit($event->description, 110) }}</p>
 
-            {{-- Location and Price --}}
-            <p class="text-sm mb-2">
-                <strong>Location:</strong> {{ $event->location ?? 'TBD' }}
-                @if($event->is_free)
-                    <span class="text-emerald-600 font-semibold ml-2">Free</span>
-                @else
-                    <span class="text-amber-600 font-semibold ml-2">${{ number_format($event->price, 2) }}</span>
-                @endif
-            </p>
-
-            {{-- Capacity & Participants --}}
-            <p class="text-sm text-gray-400 mb-2">
-                Capacity: {{ $event->capacity ?? 'Unlimited' }} |
-                Participants: {{ $event->participantCount() }}
-            </p>
+            <div class="space-y-2 text-sm text-gray-600">
+                <p>
+                    <span class="font-semibold text-gray-900">Location:</span> {{ $event->location ?? 'TBD' }}
+                </p>
+                <p>
+                    <span class="font-semibold text-gray-900">Capacity:</span> {{ $event->capacity ?? 'Unlimited' }}
+                </p>
+                <p>
+                    <span class="font-semibold text-gray-900">Price:</span>
+                    @if($event->is_free)
+                        <span class="font-semibold text-emerald-600">Free</span>
+                    @else
+                        <span class="font-semibold text-amber-600">${{ number_format($event->price, 2) }}</span>
+                    @endif
+                </p>
+            </div>
         </div>
 
         {{-- Bottom Buttons: Details + Save/Unsave --}}
-        <div class="flex items-center justify-between mt-3">
+        <div class="mt-5 flex items-center justify-between gap-3 border-t border-gray-100 pt-4">
 
             {{-- Details Button --}}
-            <a href="{{ route('events.show', $event) }}" class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition-colors duration-200 transform hover:scale-105">
+            <a href="{{ route('events.show', $event) }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm text-white shadow transition hover:bg-amber-500">
                 <i class="fa-solid fa-circle-info"></i>
                 Details
             </a>
@@ -59,13 +70,13 @@
                         @if(auth()->user()->savedEvents->contains($event))
                             @method('DELETE')
                             <button type="submit"
-                            class="flex items-center gap-2 text-white bg-amber-500 hover:bg-amber-600 border border-amber-500 px-3 py-1 rounded text-sm transition duration-200 transform hover:scale-105">
+                            class="inline-flex items-center gap-2 rounded-xl border border-amber-500 bg-amber-500 px-3 py-2 text-sm text-white transition hover:bg-amber-600">
                                 <i class="fa-solid fa-bookmark"></i>
                                 Saved
                             </button>
                         @else
                             <button type="submit"
-                                    class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition duration-200 transform hover:scale-105">
+                                    class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm text-emerald-600 shadow-sm ring-1 ring-emerald-200 transition hover:bg-emerald-50">
                                 <i class="fa-regular fa-bookmark"></i>
                                 Save
                             </button>
@@ -77,7 +88,7 @@
             @guest
                 <button type="button"
                     @click="showAuthModal = true"
-                    class="flex items-center gap-2 bg-emerald-600 hover:bg-amber-500 text-white py-2 px-4 rounded text-sm transition duration-200 transform hover:scale-105">
+                    class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm text-emerald-600 shadow-sm ring-1 ring-emerald-200 transition hover:bg-emerald-50">
                     <i class="fa-regular fa-bookmark"></i>
                     Save
                 </button>

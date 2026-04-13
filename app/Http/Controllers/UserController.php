@@ -4,17 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Services\FirebaseService;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    protected FirebaseService $firebaseService;
-
-    public function __construct(FirebaseService $firebaseService)
-    {
-        $this->firebaseService = $firebaseService;
-    }
-
     /**
      * Register a new user
      */
@@ -83,6 +76,19 @@ class UserController extends Controller
                 'error' => 'Failed to fetch profile: ' . $e->getMessage(),
             ], 400);
         }
+    }
+
+    /**
+     * Show the public profile page for a user.
+     */
+    public function show(User $user): View
+    {
+        $events = $user->events()
+            ->whereIn('status', ['published', 'cancelled'])
+            ->latest()
+            ->get();
+
+        return view('users.show', compact('user', 'events'));
     }
 
     /**

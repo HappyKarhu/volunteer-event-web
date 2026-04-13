@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\SectionVolunteerController;
 
 
 //public routes
@@ -53,5 +54,7 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
 });
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+Route::post('/sections/{section}/join', [SectionVolunteerController::class, 'join'])->name('sections.join');
 
 require __DIR__.'/auth.php';

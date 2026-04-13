@@ -6,6 +6,7 @@ use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\EventAttendee;
 
 class EventController extends Controller
 {
@@ -225,7 +226,38 @@ class EventController extends Controller
         $event->update($validated);
 
         return redirect()->route('dashboard')->with('success', 'Event updated successfully.');
-    }       
+    }    
+    /**
+     * @desc Apply to the specified event
+     * @route 
+     */
+     public function apply(Request $request, Event $event)
+    {
+        // Only volunteers
+        if ($request->user()->role !== 'volunteer') {
+            abort(403, 'Only volunteers can apply');
+        }
+
+        // Prevent duplicate join
+        $attendee = EventAttendee::firstOrCreate(
+            [
+                'event_id' => $event->id,
+                'user_id' => $request->user()->id,
+            ],
+            [
+                'joined_at' => now(),
+            ]
+        );
+
+        return back()->with(
+            'success',
+            $attendee->wasRecentlyCreated
+                ? 'Successfully applied to event!'
+                : 'You already joined this event.'
+        );
+    }
+
+    
     /**
      * @desc Remove the specified event from storage
      * @route DELETE /events/{id}

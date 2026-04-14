@@ -18,7 +18,7 @@
                 </p>
 
                 <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                    {{ $event->participantCount() }} joined
+                    {{ $event->applications->where('status', 'approved')->count() }} joined
                 </span>
             </div>
 

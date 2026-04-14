@@ -177,7 +177,7 @@
                         @foreach($events as $event)
                             <div class="relative {{ $event->status === 'cancelled' ? 'opacity-60' : '' }}">
                                 <x-event-card :event="$event" />
-
+                                
                                 <div class="absolute bottom-3 right-3">
                                     <span class="rounded-full px-3 py-1 text-xs font-semibold shadow-sm
                                         @if($event->status === 'published') bg-emerald-50 text-emerald-600
@@ -189,10 +189,17 @@
                                     </span>
                                 </div>
 
-                                <div class="absolute left-3 top-3">
+                                {{-- Edit and applications --}}
+                                <div class="absolute left-3 top-3 flex flex-col gap-2">
+
                                     <a href="{{ route('events.edit', $event) }}"
-                                        class="rounded-xl border border-emerald-300 bg-white px-3 py-2 text-emerald-600 shadow hover:bg-emerald-50">
+                                        class="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-emerald-600 shadow hover:bg-emerald-50 border border-emerald-200">
                                         Edit
+                                    </a>
+
+                                    <a href="{{ route('events.applications', $event) }}"
+                                        class="rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow hover:bg-amber-500">
+                                        Applications ({{ $event->applications->count() }})
                                     </a>
                                 </div>
 
@@ -204,10 +211,11 @@
                                     @method('DELETE')
 
                                     <button type="submit"
-                                        class="rounded-xl border border-red-300 bg-white px-3 py-2 text-red-600 shadow hover:bg-red-50">
+                                        class="rounded-xl border border-amber-300 bg-white px-3 py-2 text-amber-500 shadow hover:bg-amber-50">
                                         Delete
                                     </button>
                                 </form>
+                                
                             </div>
                         @endforeach
                     </div>

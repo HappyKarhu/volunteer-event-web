@@ -24,7 +24,7 @@
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div class="rounded-2xl bg-white/15 px-5 py-4 text-white backdrop-blur-sm">
                             <p class="text-xs uppercase tracking-[0.2em] text-emerald-50">Applied</p>
-                            <p class="mt-2 text-3xl font-bold">{{ $appliedEvents->count() }}</p>
+                            <p class="mt-2 text-3xl font-bold">{{ $applications->count() }}</p>
                         </div>
                         <div class="rounded-2xl bg-white/15 px-5 py-4 text-white backdrop-blur-sm">
                             <p class="text-xs uppercase tracking-[0.2em] text-emerald-50">Saved</p>
@@ -137,14 +137,14 @@
                 <div class="mb-5 flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-emerald-600">Applied Events</h2>
                     <span class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                        {{ $appliedEvents->count() }} {{ Str::plural('event', $appliedEvents->count()) }}
+                        {{ $applications->count() }} {{ Str::plural('event', $applications->count()) }}
                     </span>
                 </div>
 
-                @if($appliedEvents->count())
+                @if($applications->count())
                     <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                        @foreach($appliedEvents as $event)
-                            <x-event-card :event="$event" />
+                        @foreach($applications as $application)
+                            <x-event-card :event="$application->event" />
                         @endforeach
                     </div>
                 @else

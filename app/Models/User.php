@@ -6,6 +6,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\EventApplication;
 
 class User extends Authenticatable
 {
@@ -95,6 +96,22 @@ class User extends Authenticatable
             'event_id'     // Local key on EventAttendee
         );
     }
+    public function eventApplications()
+    {
+        return $this->hasMany(EventApplication::class);
+    }
+
+    public function appliedEvents()
+    {
+        return $this->hasManyThrough(
+            Event::class,
+            EventApplication::class,
+            'user_id',
+            'id',
+            'id',
+            'event_id'
+        );
+    }
 
     /**
      * Get the organizer logo URL, or default if missing
@@ -127,5 +144,13 @@ class User extends Authenticatable
     public function getProfileImageUrlAttribute(): string
     {
         return $this->isOrganizer() ? $this->logo_url : $this->avatar_url;
+    }
+
+     /**
+     * Applications relationship for volunteers applying to events
+     */
+    public function applications()
+    {
+        return $this->hasMany(EventApplication::class);
     }
 }

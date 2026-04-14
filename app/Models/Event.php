@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\EventAttendee;
 use App\Models\SectionVolunteer;
 use App\Models\User;
+use App\Models\EventApplication;
 
 
 class Event extends Model
@@ -54,6 +55,10 @@ class Event extends Model
     {
         return $this->hasMany(EventAttendee::class);
     }
+    public function applications()
+    {
+        return $this->hasMany(EventApplication::class);
+    }
 
     //capacity counting - attendees + volunteers, counting unique users only
 public function participantCount(): int
@@ -80,5 +85,10 @@ public function participantCount(): int
         }
 
         return $this->participantCount() >= $this->capacity;
+    }
+    public function approvedApplications()
+    {
+        return $this->hasMany(EventApplication::class)
+            ->where('status', 'approved');
     }
 }

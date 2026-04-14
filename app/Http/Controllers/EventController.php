@@ -233,29 +233,38 @@ class EventController extends Controller
      */
      public function apply(Request $request, Event $event)
     {
+        $user = $request->user();
         // Only volunteers
-        if ($request->user()->role !== 'volunteer') {
+        if ($user->role !== 'volunteer') {
             abort(403, 'Only volunteers can apply');
         }
 
         // Prevent duplicate join
-        $attendee = EventAttendee::firstOrCreate(
-            [
-                'event_id' => $event->id,
-                'user_id' => $request->user()->id,
-            ],
-            [
-                'joined_at' => now(),
-            ]
-        );
+        if ($event->applications()->where('user_id', $user->id)->exists()) {
+        return back()->with('error', 'You already applied for this event.');
+        }
 
-        return back()->with(
-            'success',
-            $attendee->wasRecentlyCreated
-                ? 'Successfully applied to event!'
-                : 'You already joined this event.'
-        );
-    }
+        $validated = $request->validate([
+            'message' => 'nullable|string|max:1000',
+            'cv' => 'nullable|file|mimes:pdf|max:2048',
+        ]);
+
+        $cvPath = null;
+
+        if ($request->hasFile('cv')) {
+            $cvPath = $request->file('cv')->store('cvs', 'public');
+        }
+
+        $event->applications()->create([
+            'user_id' => $user->id,
+            'message' => $validated['message'] ?? null,
+            'cv_path' => $cvPath,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Application submitted!');
+
+        }
 
     
     /**

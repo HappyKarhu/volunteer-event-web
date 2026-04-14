@@ -115,6 +115,13 @@
             </div>
         </div>
 
+        @auth
+            @php
+                $application = auth()->user()->applications
+                    ->where('event_id', $event->id)
+                    ->first();
+            @endphp
+        @endauth
         {{-- Apply Button --}}
         <div class="rounded-2xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
             @guest
@@ -128,14 +135,50 @@
 
             @auth
                 @if(auth()->user()->role === 'volunteer')
-                    <form action="{{ route('events.apply', $event) }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white shadow transition hover:bg-amber-500">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            Apply to Event
-                        </button>
-                    </form>
+
+                    @if($application)
+                        {{-- Already applied state --}}
+                        <div class="rounded-xl bg-emerald-50 px-4 py-3 text-emerald-700 text-sm font-semibold">
+                            You already applied
+                            @if($application->status === 'approved')
+                                • Approved ✅
+                            @elseif($application->status === 'rejected')
+                                • Declined
+                            @else
+                                • Pending
+                            @endif
+                        </div>
+
+                    @else
+                        {{-- SHOW FORM ONLY IF NOT APPLIED --}}
+                        <form 
+                            action="{{ route('events.apply', $event) }}" 
+                            method="POST" 
+                            enctype="multipart/form-data"
+                            class="space-y-3"
+                        >
+                            @csrf
+
+                            <textarea 
+                                name="message" 
+                                placeholder="Why do you want to join this event?"
+                                class="w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            ></textarea>
+
+                            <input 
+                                type="file" 
+                                name="cv" 
+                                class="w-full text-sm"
+                            >
+
+                            <button type="submit"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white shadow transition hover:bg-emerald-700">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Apply to Event
+                            </button>
+                        </form>
+                    @endif
+
                 @else
                     <p class="text-sm text-gray-500">
                         Only volunteers can apply for this event.

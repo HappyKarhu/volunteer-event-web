@@ -13,7 +13,7 @@ A Laravel-based web platform that connects event organizers with volunteers.
 - Create and manage events
 - Edit and delete own events
 - See their created events (dashboard)
-- View participants (volunteers)
+- View participants (volunteers) and can review->accept/reject
 
 ### Volunteer
 - Join events
@@ -30,6 +30,7 @@ A Laravel-based web platform that connects event organizers with volunteers.
 - preloaded_photos
 - contact_messages
 - notification_logs
+- event_applications
 
 ## ⚙️ Tech Stack
 
@@ -42,6 +43,11 @@ A Laravel-based web platform that connects event organizers with volunteers.
 
 - Organizer → manages events
 - Volunteer → joins events
+
+## Applying to the event
+- Volunteer fills form → saved as EventApplication
+- Organizer reviews → accepts/rejects
+- If accepted → becomes EventAttendee
 
 ## 🔮 Planned Features
 

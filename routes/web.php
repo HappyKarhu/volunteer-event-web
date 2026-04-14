@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\SectionVolunteerController;
+use App\Http\Controllers\EventApplicationController;
 
 
 //public routes
@@ -46,11 +47,20 @@ Route::middleware(['auth', 'role:organizer'])->group(function () {
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
     
+    //application management routes
+    Route::get('/events/{event}/applications', [EventApplicationController::class, 'index'])
+        ->name('events.applications');
+    Route::post('/applications/{application}/approve', [EventApplicationController::class, 'approve'])
+        ->name('applications.approve');
+    Route::post('/applications/{application}/reject', [EventApplicationController::class, 'reject'])
+        ->name('applications.reject');
 });
 
 //volunteer routes (logged in volunteers only)
 Route::middleware(['auth', 'role:volunteer'])->group(function () {
-    Route::post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
+    Route::post('/events/{event}/apply', [EventApplicationController::class, 'store'])
+        ->middleware(['auth', 'role:volunteer'])
+        ->name('events.apply');
 });
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');

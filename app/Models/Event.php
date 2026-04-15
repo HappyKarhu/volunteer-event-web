@@ -89,6 +89,6 @@ public function participantCount(): int
     public function approvedApplications()
     {
         return $this->hasMany(EventApplication::class)
-            ->where('status', 'approved');
+            ->where('status', EventApplication::STATUS_APPROVED);
     }
 }

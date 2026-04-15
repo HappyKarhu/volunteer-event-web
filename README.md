@@ -31,6 +31,7 @@ A Laravel-based web platform that connects event organizers with volunteers.
 - contact_messages
 - notification_logs
 - event_applications
+- event_application_status_histories
 
 ## ⚙️ Tech Stack
 

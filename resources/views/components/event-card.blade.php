@@ -1,7 +1,8 @@
-@props(['event'])
+@props(['event', 'status' => null, 'statusLabel' => null])
 
-<div x-data="{ showAuthModal: false }" class="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-    
+<div x-data="{ showAuthModal: false }"
+     class="relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+
     {{-- Event Photo --}}
     @if($event->photo)
         <img src="{{ asset('storage/' . $event->photo) }}" 
@@ -50,6 +51,25 @@
                         <span class="font-semibold text-amber-600">${{ number_format($event->price, 2) }}</span>
                     @endif
                 </p>
+                {{-- -Status --}}
+                @if(!empty($status) && isset($statusLabel))
+                    @php
+                        $statusClass = match($status) {
+                            'approved' => 'bg-emerald-500',
+                            'rejected' => 'bg-red-500',
+                            'pending' => 'bg-amber-500',
+                            'cancelled' => 'bg-gray-500',
+                            'waitlisted' => 'bg-blue-500',
+                            default => 'bg-gray-400'
+                        };
+                    @endphp
+
+                    <div class="absolute top-3 right-3">
+                        <span class="text-white text-xs px-3 py-1 rounded-full {{ $statusClass }}">
+                            {{ $statusLabel }}
+                        </span>
+                    </div>
+                @endif
             </div>
         </div>
 

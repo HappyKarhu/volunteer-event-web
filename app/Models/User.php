@@ -96,10 +96,7 @@ class User extends Authenticatable
             'event_id'     // Local key on EventAttendee
         );
     }
-    public function eventApplications()
-    {
-        return $this->hasMany(EventApplication::class);
-    }
+    
 
     public function appliedEvents()
     {

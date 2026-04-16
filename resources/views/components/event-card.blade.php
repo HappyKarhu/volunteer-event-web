@@ -1,4 +1,4 @@
-@props(['event', 'status' => null, 'statusLabel' => null])
+@props(['event', 'application' => null, 'status' => null, 'statusLabel' => null])
 
 <div x-data="{ showAuthModal: false }"
      class="relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -58,9 +58,9 @@
                             'approved' => 'bg-emerald-500',
                             'rejected' => 'bg-red-500',
                             'pending' => 'bg-amber-500',
-                            'cancelled' => 'bg-gray-500',
-                            'waitlisted' => 'bg-blue-500',
-                            default => 'bg-gray-400'
+                            'cancelled' => 'bg-zinc-500',
+                            'waitlisted' => 'bg-indigo-500',
+                            default => 'bg-slate-400'
                         };
                     @endphp
 
@@ -70,6 +70,19 @@
                         </span>
                     </div>
                 @endif
+
+                {{-- volunteer withdraw applications --}}
+                @if(isset($application) && $application->isPending())
+                    <form method="POST" action="{{ route('applications.withdraw', $application) }}" class="mt-3">
+                        @csrf
+
+                        <button type="submit"
+                            class="w-full rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition">
+                            Withdraw Application
+                        </button>
+                    </form>
+                @endif
+                
             </div>
         </div>
 

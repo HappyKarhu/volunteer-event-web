@@ -82,4 +82,22 @@ class EventApplicationController extends Controller
 
         return back()->with('success', 'Application rejected.');
     }
+
+    public function withdraw(EventApplication $application)
+    {
+        // Only the owner (volunteer) can withdraw own application
+        abort_if($application->user_id !== auth()->id(), 403);
+
+        // Only allow if still pending
+        if (!$application->isPending()) {
+            return back()->with('error', 'You can only withdraw pending applications.');
+        }
+
+        // Update status to cancelled
+        $application->update([
+            'status' => EventApplication::STATUS_CANCELLED,
+        ]);
+
+        return back()->with('success', 'Application withdrawn successfully.');
+    }
 }

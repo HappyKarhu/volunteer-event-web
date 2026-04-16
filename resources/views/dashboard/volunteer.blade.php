@@ -1,6 +1,6 @@
 <x-layout>
 
-<div x-data="{ tab: 'applications' }"
+<div x-data="{ tab: 'profile' }"
      class="mx-auto mt-10 w-full max-w-6xl space-y-8 px-5">
 
     {{-- Header --}}
@@ -142,7 +142,7 @@
                     @endif
 
                     <form method="POST"
-                          action="{{ route('profile.update') }}"
+                          action="{{ route('profile.update', ['tab' => 'profile']) }}"
                           enctype="multipart/form-data"
                           class="mt-4 space-y-4">
 
@@ -151,7 +151,7 @@
 
                         <x-inputs.text name="name" label="Full Name" :value="$user->name" />
                         <x-inputs.text-area name="bio" label="Bio" :value="$user->bio" rows="4" />
-                        <x-inputs.text-area name="skills" label="Skills" :value="$user->skills" rows="4" />
+                        <x-inputs.text-area name="skills" placeholder="Enter your skills, separated by commas" label="Skills" :value="$user->skills" rows="4" />
                         <x-inputs.file name="avatar" label="Change Avatar" />
 
                         <button class="rounded-xl bg-emerald-600 px-5 py-2 text-white shadow hover:bg-amber-500">
@@ -181,6 +181,7 @@
                         {{-- EVENT CARD --}}
                         <x-event-card
                             :event="$application->event"
+                            :application="$application"
                             :status="$application->status"
                             :statusLabel="$application->status_label"
                         />
@@ -216,9 +217,9 @@
                                 'approved' => 'bg-emerald-500',
                                 'rejected' => 'bg-red-500',
                                 'pending' => 'bg-amber-500',
-                                'cancelled' => 'bg-gray-500',
-                                'waitlisted' => 'bg-blue-500',
-                                default => 'bg-gray-400'
+                                'cancelled' => 'bg-zinc-500',
+                                'waitlisted' => 'bg-indigo-500',
+                                default => 'bg-slate-400'
                             };
                         @endphp
 

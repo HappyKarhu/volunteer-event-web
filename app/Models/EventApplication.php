@@ -102,4 +102,5 @@ class EventApplication extends Model
             }
         });
     }
+
 }

@@ -64,6 +64,8 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
     Route::post('/events/{event}/apply', [EventApplicationController::class, 'store'])
         ->middleware(['auth', 'role:volunteer'])
         ->name('events.apply');
+    Route::post('/applications/{application}/withdraw', [EventApplicationController::class, 'withdraw'])
+        ->name('applications.withdraw');
 });
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');

@@ -242,7 +242,6 @@
                 <div>
                     <label class="{{ $labelStyle }}">Event Image</label>
                     <input type="file" name="photo" id="event-photo" class="w-full text-gray-700" @change="eventPreview = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" x-data="{ eventPreview: null }">
-
                 </div>
 
             {{-- Submit --}}

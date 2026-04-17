@@ -175,7 +175,7 @@
             <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
 
                 @foreach($applications as $application)
-
+                    
                     <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
 
                         {{-- EVENT CARD --}}

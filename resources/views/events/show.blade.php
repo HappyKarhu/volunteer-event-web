@@ -141,7 +141,7 @@
                         <div class="rounded-xl bg-emerald-50 px-4 py-3 text-emerald-700 text-sm font-semibold">
                             You already applied
                             @if($application->status === 'approved')
-                                • Approved ✅
+                                • Approved
                             @elseif($application->status === 'rejected')
                                 • Declined
                             @else

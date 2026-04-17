@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\SectionVolunteerController;
 use App\Http\Controllers\EventApplicationController;
+use App\Http\Controllers\EventApplicationMessageController;
 
 
 //public routes
@@ -66,6 +67,13 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
         ->name('events.apply');
     Route::post('/applications/{application}/withdraw', [EventApplicationController::class, 'withdraw'])
         ->name('applications.withdraw');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/applications/{application}', [EventApplicationController::class, 'show'])
+        ->name('applications.show');
+    Route::post('/applications/{application}/messages', [EventApplicationMessageController::class, 'store'])
+        ->name('applications.messages.store');
 });
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');

@@ -100,4 +100,19 @@ class EventApplicationController extends Controller
 
         return back()->with('success', 'Application withdrawn successfully.');
     }
+
+    public function show(EventApplication $application)
+{
+        $user = auth()->user();
+
+        abort_unless(
+            $user->id === $application->user_id ||
+            $user->id === $application->event->organizer_id,
+            403
+        );
+
+        $application->load(['messages.sender', 'messages.receiver', 'user', 'event']);
+
+        return view('applications.show', compact('application'));
+    }
 }

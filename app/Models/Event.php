@@ -91,4 +91,5 @@ public function participantCount(): int
         return $this->hasMany(EventApplication::class)
             ->where('status', EventApplication::STATUS_APPROVED);
     }
+
 }

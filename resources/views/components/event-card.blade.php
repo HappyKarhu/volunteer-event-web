@@ -87,8 +87,8 @@
         </div>
 
         {{-- Bottom Buttons: Details + Save/Unsave --}}
-        <div class="mt-5 flex items-center justify-between gap-3 border-t border-gray-100 pt-4">
-
+        <div class="mt-5 space-y-3 border-t border-gray-100 pt-4">
+            <div class="flex items-center justify-between gap-3">
             {{-- Details Button --}}
             <a href="{{ route('events.show', $event) }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm text-white shadow transition hover:bg-amber-500">
                 <i class="fa-solid fa-circle-info"></i>
@@ -126,6 +126,13 @@
                     Save
                 </button>
             @endguest
+            </div>
+                @if($application)
+                    <a href="{{ route('applications.show', $application) }}"
+                    class="block w-full text-center px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-amber-500 transition">
+                        Messages
+                    </a>
+                @endif
         </div>
     </div>
 

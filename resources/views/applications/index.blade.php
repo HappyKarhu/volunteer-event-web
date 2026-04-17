@@ -29,6 +29,13 @@
                             View CV
                         </a>
                     @endif
+
+                    <div class="mt-4">
+                    <a href="{{ route('applications.show', $application) }}"
+                    class="inline-block px-3 py-1 bg-emerald-600 text-white rounded">
+                        Open Messages
+                    </a>
+                </div>
                 </div>
 
                 <div class="text-sm">

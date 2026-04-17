@@ -7,7 +7,6 @@
 
         @php
             $sectionStyle = "p-5 border border-gray-100 rounded-xl bg-gray-50 space-y-4";
-            $inputStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500";
             $labelStyle = "block text-sm font-medium text-gray-700 mb-1";           
         @endphp
 
@@ -34,7 +33,7 @@
                         label="Event description"
                         placeholder="Effective volunteer event descriptions should be concise, engaging, and provide all necessary details..." 
                         rows="3" 
-                        class="{{ $inputStyle }}"
+                        
                     >
                         {{ old('description') }}
                     </x-inputs.text-area>
@@ -52,7 +51,7 @@
                         label="Responsibilities"
                         placeholder="List the main responsibilities for this event." 
                         rows="3" 
-                        class="{{ $inputStyle }}"
+                        
                     >
                         {{ old('responsibilities') }}
                     </x-inputs.text-area>
@@ -81,8 +80,10 @@
 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
-                        <label class="{{ $labelStyle }}">Start Date</label>
-                        <input type="date" name="start_date" class="{{ $inputStyle }}" value="{{ old('start_date') }}">
+                        <x-inputs.date
+                            name="start_date"
+                            label="Start Date"
+                        />
                         {{-- Start date error --}}
                         @error('start_date')
                             <p x-show="showErrors" 
@@ -93,8 +94,10 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="{{ $labelStyle }}">End Date</label>
-                        <input type="date" name="end_date" class="{{ $inputStyle }}" value="{{ old('end_date') }}">
+                        <x-inputs.date
+                            name="end_date"
+                            label="End Date"
+                        />
                         {{-- End date error --}}
                         @error('end_date')
                             <p x-show="showErrors" 
@@ -128,8 +131,12 @@
                 </label>
 
                 <div x-show="!isFree" x-transition>
-                    <label class="{{ $labelStyle }}">Price (€)</label>
-                    <input type="number" step="0.01" name="price" class="{{ $inputStyle }}" value="{{ old('price') }}">
+                    <x-inputs.text
+                        name="price"
+                        label="Price (€)"
+                        type="number"
+                        step="0.01"
+                    />
                     {{-- Price error --}}
                     @error('price')
                         <p x-show="showErrors" 
@@ -221,12 +228,15 @@
 
                 {{-- Status --}}
                 <div>
-                    <label class="{{ $labelStyle }}">Status</label>
-                    <select name="status" class="{{ $inputStyle }}">
-                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
-                        <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                    </select>
+                    <x-inputs.select
+                        name="status"
+                        label="Status"
+                        :options="[
+                            'draft' => 'Draft',
+                            'published' => 'Published',
+                            'cancelled' => 'Cancelled'
+                        ]"
+                    />
                     
                     @error('status')
                         <p x-show="showErrors" 

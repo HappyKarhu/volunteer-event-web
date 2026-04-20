@@ -11,10 +11,26 @@
         @endphp
 
         
-        <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 mt-6">
+        <form
+            action="{{ route('events.store') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="space-y-6 mt-6"
+            x-data="{
+                showErrors: true,
+                isFree: {{ old('is_free', 0) ? 'true' : 'false' }},
+                type: '{{ old('type', 'simple') }}',
+                sections: {{ \Illuminate\Support\Js::from(old('sections', [['role_name' => '', 'description' => '', 'capacity' => '']])) }},
+                addSection() {
+                    this.sections.push({ role_name: '', description: '', capacity: '' });
+                },
+                removeSection(index) {
+                    this.sections.splice(index, 1);
+                }
+            }"
+            x-init="setTimeout(() => showErrors = false, 5000)"
+        >
             @csrf
-            <div x-data="{ showErrors: true }" 
-            x-init="setTimeout(() => showErrors = false, 5000)">
             {{-- Basic Info --}}
             <div class="{{ $sectionStyle }}">
                 <h2 class="text-lg font-semibold text-emerald-600">Basic Information</h2>
@@ -115,13 +131,10 @@
                         label="Location"
                         placeholder="Event location"
                         :value="old('location')" />
-                </div>
-                </div>
-    
             </div>
 
             {{-- Pricing --}}
-            <div x-data="{ isFree: false }" class="{{ $sectionStyle }}">
+            <div class="{{ $sectionStyle }}">
                 <h2 class="text-lg font-semibold text-emerald-600">Pricing</h2>
 
                 <input type="hidden" name="is_free" value="0">
@@ -149,7 +162,7 @@
             </div>
 
             {{-- Event Type --}}
-            <div x-data="{ type: '{{ old('type', 'simple') }}' }" class="grid md:grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
 
                 {{-- Simple Event --}}
                 <label 
@@ -202,7 +215,7 @@
                 </label>
 
 
-                <div>
+                <div x-show="type === 'simple'" x-transition>
                     <x-inputs.text
                         name="capacity"
                         label="Capacity"
@@ -211,6 +224,52 @@
                         :value="old('capacity')" />
                 </div>
     
+            </div>
+
+            <div x-show="type === 'sectioned'" x-transition class="{{ $sectionStyle }}">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-semibold text-emerald-600">Roles and Capacities</h2>
+                        <p class="text-sm text-gray-500">Add the roles volunteers can be assigned to after approval.</p>
+                    </div>
+                    <button type="button" @click="addSection()" class="rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50">
+                        Add Role
+                    </button>
+                </div>
+
+                @error('sections')
+                    <p x-show="showErrors" x-transition class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+
+                <template x-for="(section, index) in sections" :key="index">
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 space-y-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="font-semibold text-gray-800" x-text="section.role_name || `Role ${index + 1}`"></h3>
+                            <button type="button" @click="removeSection(index)" class="text-sm font-medium text-red-500 hover:text-red-600">
+                                Remove
+                            </button>
+                        </div>
+
+                        <input type="hidden" :name="`sections[${index}][id]`" :value="section.id ?? ''">
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="{{ $labelStyle }}">Role Name</label>
+                                <input type="text" :name="`sections[${index}][role_name]`" x-model="section.role_name" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="Cleaner, Speaker, Setup team...">
+                            </div>
+
+                            <div>
+                                <label class="{{ $labelStyle }}">Capacity</label>
+                                <input type="number" min="1" :name="`sections[${index}][capacity]`" x-model="section.capacity" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="How many volunteers?">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="{{ $labelStyle }}">Role Description</label>
+                            <textarea :name="`sections[${index}][description]`" x-model="section.description" rows="3" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="What will this role help with?"></textarea>
+                        </div>
+                    </div>
+                </template>
             </div>
 
             {{-- Extras --}}
@@ -260,7 +319,6 @@
                     Create Event
                 </button>
             </div>
-        </div>
         </form>
     </div>
 </x-layout>

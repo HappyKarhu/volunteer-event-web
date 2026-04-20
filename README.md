@@ -46,10 +46,20 @@ A Laravel-based web platform that connects event organizers with volunteers.
 - Organizer → manages events
 - Volunteer → joins events
 
-## Applying to the event
-- Volunteer fills form → saved as EventApplication
-- Organizer reviews → accepts/rejects
-- If accepted → becomes EventAttendee
+## 📝 Applying to the event
+
+The system supports two event types:
+
+### 🟢 Simple event
+- Volunteer submits an application (EventApplication)
+- Organizer reviews application (approve/reject)
+- If approved → volunteer becomes EventAttendee
+
+### 🟣 Sectioned event
+- Volunteer submits an application (EventApplication)
+- Volunteer selects a section when applying
+- Organizer reviews application and assigns/validates section
+- If approved → volunteer becomes SectionVolunteer
 
 ## 🔮 Planned Features
 

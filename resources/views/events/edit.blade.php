@@ -11,6 +11,12 @@
             $labelStyle = "block text-sm font-medium text-gray-700 mb-1";
             $isFree = old('is_free', $event->is_free) ? 1 : 0;
             $eventType = old('type', $event->type);
+            $sections = old('sections', $event->sections->map(fn ($section) => [
+                'id' => $section->id,
+                'role_name' => $section->role_name,
+                'description' => $section->description,
+                'capacity' => $section->capacity,
+            ])->values()->all());
         @endphp
 
         <form
@@ -18,7 +24,17 @@
             method="POST"
             enctype="multipart/form-data"
             class="space-y-6 mt-6"
-            x-data="{ type: '{{ $eventType }}', isFree: {{ $isFree ? 'true' : 'false' }} }"
+            x-data="{
+                type: '{{ $eventType }}',
+                isFree: {{ $isFree ? 'true' : 'false' }},
+                sections: {{ \Illuminate\Support\Js::from($sections ?: [['role_name' => '', 'description' => '', 'capacity' => '']]) }},
+                addSection() {
+                    this.sections.push({ role_name: '', description: '', capacity: '' });
+                },
+                removeSection(index) {
+                    this.sections.splice(index, 1);
+                }
+            }"
         >
             @csrf
             @method('PUT')
@@ -234,6 +250,52 @@
                     @enderror
                     <p class="text-sm text-gray-500">Upload a new image only if you want to replace the current one.</p>
                 </div>
+            </div>
+
+            <div x-show="type === 'sectioned'" x-transition class="{{ $sectionStyle }}">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-semibold text-emerald-600">Roles and Capacities</h2>
+                        <p class="text-sm text-gray-500">Manage the sections volunteers can be assigned to.</p>
+                    </div>
+                    <button type="button" @click="addSection()" class="rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50">
+                        Add Role
+                    </button>
+                </div>
+
+                @error('sections')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
+
+                <template x-for="(section, index) in sections" :key="section.id ?? index">
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 space-y-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="font-semibold text-gray-800" x-text="section.role_name || `Role ${index + 1}`"></h3>
+                            <button type="button" @click="removeSection(index)" class="text-sm font-medium text-red-500 hover:text-red-600">
+                                Remove
+                            </button>
+                        </div>
+
+                        <input type="hidden" :name="`sections[${index}][id]`" :value="section.id ?? ''">
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="{{ $labelStyle }}">Role Name</label>
+                                <input type="text" :name="`sections[${index}][role_name]`" x-model="section.role_name" class="{{ $inputStyle }}" placeholder="Cleaner, Speaker, Setup team...">
+                            </div>
+
+                            <div>
+                                <label class="{{ $labelStyle }}">Capacity</label>
+                                <input type="number" min="1" :name="`sections[${index}][capacity]`" x-model="section.capacity" class="{{ $inputStyle }}" placeholder="How many volunteers?">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="{{ $labelStyle }}">Role Description</label>
+                            <textarea :name="`sections[${index}][description]`" x-model="section.description" rows="3" class="{{ $inputStyle }}" placeholder="What will this role help with?"></textarea>
+                        </div>
+                    </div>
+                </template>
             </div>
 
             @if ($errors->any())

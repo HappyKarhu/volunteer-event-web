@@ -32,6 +32,11 @@
                 </p>
 
                 <p class="text-gray-600 mb-2">
+                    <strong>Type:</strong>
+                    {{ ucfirst($event->type) }}
+                </p>
+
+                <p class="text-gray-600 mb-2">
                     <strong>Capacity:</strong> {{ $event->capacity ?? 'Unlimited' }} |
                     <strong>Participants:</strong> {{ $event->participantCount() }}
                 </p>
@@ -69,17 +74,46 @@
         @endif
 
         {{-- Tags --}}
-        @if($event->tags)
-            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Tags</h2>
+	        @if($event->tags)
+	            <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+	                <h2 class="mb-3 text-2xl font-semibold text-emerald-600">Tags</h2>
                 <div class="flex flex-wrap gap-2">
                     @foreach(explode(',', $event->tags) as $tag)
                         <span class="rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-700">{{ trim($tag) }}</span>
                     @endforeach
                 </div>
-            </div>
-        @endif
-        </div>
+	            </div>
+	        @endif
+
+            @if($event->isFull())
+                <div class="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-sm text-amber-800">
+                    This event is currently full. New applications will be added to the waitlist.
+                </div>
+            @endif
+
+            @if($event->type === 'sectioned' && $event->sections->count())
+                <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                    <h2 class="mb-4 text-2xl font-semibold text-emerald-600">Roles Needed</h2>
+                    <div class="space-y-3">
+                        @foreach($event->sections as $section)
+                            <div class="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+                                <div class="flex items-center justify-between gap-4">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">{{ $section->role_name }}</h3>
+                                        @if($section->description)
+                                            <p class="mt-1 text-sm text-gray-600">{{ $section->description }}</p>
+                                        @endif
+                                    </div>
+                                    <div class="text-sm font-semibold text-emerald-700">
+                                        {{ $section->volunteers->count() }}{{ $section->capacity ? ' / ' . $section->capacity : '' }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+	        </div>
 
         {{-- Organizer Info --}}
         <div class="space-y-6">
@@ -144,13 +178,15 @@
                                 • Approved
                             @elseif($application->status === 'rejected')
                                 • Declined
+                            @elseif($application->status === 'waitlisted')
+                                • Waitlisted
                             @else
                                 • Pending
                             @endif
                         </div>
 
                     @else
-                        {{-- SHOW FORM ONLY IF NOT APPLIED --}}
+                        {{-- Show form only if not applied --}}
                         <form 
                             action="{{ route('events.apply', $event) }}" 
                             method="POST" 
@@ -158,6 +194,12 @@
                             class="space-y-3"
                         >
                             @csrf
+
+                            @if($event->type === 'sectioned')
+                                <div class="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-sm text-amber-800">
+                                    When applying, feel free to mention any role you’re interested in. The organizer will do their best to match you with a suitable position.
+                                </div>
+                            @endif
 
                             <textarea 
                                 name="message" 

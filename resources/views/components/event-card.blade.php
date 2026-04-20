@@ -72,13 +72,13 @@
                 @endif
 
                 {{-- volunteer withdraw applications --}}
-                @if(isset($application) && $application->isPending())
+                @if(isset($application) && ($application->isPending() || $application->isWaitlisted() || $application->isApproved()))
                     <form method="POST" action="{{ route('applications.withdraw', $application) }}" class="mt-3">
                         @csrf
 
                         <button type="submit"
                             class="w-full rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition">
-                            Withdraw Application
+                            {{ $application->isApproved() ? 'Leave Event' : 'Withdraw Application' }}
                         </button>
                     </form>
                 @endif

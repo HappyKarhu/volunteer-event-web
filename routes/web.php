@@ -55,9 +55,6 @@ Route::middleware(['auth', 'role:organizer'])->group(function () {
         ->name('applications.approve');
     Route::post('/applications/{application}/reject', [EventApplicationController::class, 'reject'])
         ->name('applications.reject');
-    Route::delete('/applications/{application}', [EventApplicationController::class, 'destroy'])
-        ->name('applications.destroy')
-        ->middleware(['auth', 'role:volunteer']);
 });
 
 //volunteer routes (logged in volunteers only)

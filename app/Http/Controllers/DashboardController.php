@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if ($user->isVolunteer()) {
             // Volunteer: show applied events or saved events
             $applications = $user->applications()
-                ->with('event.organizer') // Eager load event and organizer
+                ->with(['event.organizer', 'statusHistory.user']) // Eager load event, organizer, and status timeline
                 ->latest()
                 ->get();
             $savedEvents = $user->savedEvents()->latest()->get();

@@ -16,7 +16,7 @@ class SectionVolunteerController extends Controller
     {
         $event = $section->event;
 
-        if (!in_array($event->type, ['sectioned', 'mixed'], true)) {
+        if ($event->type !== 'sectioned') {
             return response()->json(['error' => 'This event does not have sections'], 400);
         }
 

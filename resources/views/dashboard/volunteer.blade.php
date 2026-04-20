@@ -221,10 +221,16 @@
                                 'waitlisted' => 'bg-indigo-500',
                                 default => 'bg-slate-400'
                             };
+
+                            $currentStatusLabel = match($application->status) {
+                                'cancelled' => $application->statusHistory->contains('status', 'approved') ? 'Left Event' : 'Withdrawn',
+                                'waitlisted' => 'Waitlisted',
+                                default => ucfirst($application->status),
+                            };
                         @endphp
 
                         <span class="text-white text-xs px-3 py-1 rounded-full {{ $statusClass }}">
-                            {{ ucfirst($application->status) }}
+                            {{ $currentStatusLabel }}
                         </span>
                     </div>
 
@@ -232,6 +238,13 @@
                     <div class="relative border-l-2 border-gray-200 pl-6 space-y-5">
 
                         @forelse($application->statusHistory as $history)
+                            @php
+                                $historyLabel = match($history->status) {
+                                    'cancelled' => $application->statusHistory->contains('status', 'approved') ? 'Left event' : 'Withdrawn',
+                                    'waitlisted' => 'Waitlisted',
+                                    default => ucfirst($history->status),
+                                };
+                            @endphp
 
                             <div class="relative pl-6">
 
@@ -240,7 +253,7 @@
 
                                     <div>
                                         <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 capitalize">
-                                            {{ $history->status }}
+                                            {{ $historyLabel }}
                                         </span>
 
                                         <p class="text-xs text-gray-500">

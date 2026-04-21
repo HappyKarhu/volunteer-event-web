@@ -68,6 +68,7 @@ The system supports two event types:
 - Multi-language support
 - Analytics dashboard
 - Editable pages (About, Terms, etc.)
+- Ratings/reputation system
 
 ## 📦 Installation
 

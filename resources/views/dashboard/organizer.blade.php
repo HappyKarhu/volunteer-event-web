@@ -225,6 +225,10 @@
                     </div>
                 @endif
             </div>
+
+            <div class="border-t border-gray-100 bg-gray-50/60 p-6 md:p-8">
+                @include('dashboard.partials.calendar', ['calendar' => $calendar])
+            </div>
         </div>
     </div>
 </x-layout>

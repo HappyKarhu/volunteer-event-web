@@ -14,13 +14,6 @@
 
             <!--Authenticated user links : dashboard is seen by organizers and volunteers -->
             @auth
-                <!--Volunteer-specific links-->
-                @if(auth()->user()->role === 'volunteer')
-                <x-nav-link :url="route('events.saved')" :active="request()->is('events/saved')">
-                    Saved Events
-                </x-nav-link>
-                @endif
-
                 <!--Organizer-specific links-->
                 @if(auth()->user()->role === 'organizer')
                     <x-nav-link :url="route('events.create')" :active="request()->is('events/create')" icon="seedling">
@@ -76,13 +69,7 @@
         <!--Authenticated user links-->
         @auth
 
-            <!--Volunteer-specific links-->
-            @if(auth()->user()->role === 'volunteer')
-            <x-nav-link mobile="true" :url="route('events.saved')" :active="request()->is('events/saved')">
-                Saved Events
-            </x-nav-link>
-            @endif
-
+            
             <!--Organizer-specific links-->
             @if(auth()->user()->role === 'organizer')
                 <x-nav-link mobile="true" :url="route('events.create')" :active="request()->is('events/create')" icon="seedling">

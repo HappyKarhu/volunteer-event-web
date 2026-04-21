@@ -23,6 +23,28 @@ class EventApplicationController extends Controller
             return redirect()->back()->with('error', 'You have already applied for this event.');
         }
 
+        $conflictingApplication = EventApplication::query()
+            ->where('user_id', $user->id)
+            ->whereIn('status', [
+                EventApplication::STATUS_PENDING,
+                EventApplication::STATUS_APPROVED,
+                EventApplication::STATUS_WAITLISTED,
+            ])
+            ->where('event_id', '!=', $event->id)
+            ->whereHas('event', function ($query) use ($event) {
+                $query->whereDate('start_date', '<=', $event->end_date->toDateString())
+                    ->whereDate('end_date', '>=', $event->start_date->toDateString());
+            })
+            ->with('event')
+            ->first();
+
+        if ($conflictingApplication) {
+            return redirect()->back()->with(
+                'error',
+                'You already have an active application for on the same day. Withdraw it first before applying to another event on that date.'
+            );
+        }
+
         //validate -pdf only, max 2MB
         $validated = $request->validate([
             'message' => 'nullable|string|max:1000',

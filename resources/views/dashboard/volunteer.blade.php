@@ -77,6 +77,12 @@
                 Saved
             </button>
 
+            <button @click="tab='calendar'"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold transition"
+                    :class="tab==='calendar' ? 'bg-emerald-600 text-white' : 'bg-white border text-gray-600'">
+                Calendar
+            </button>
+
             <button @click="tab='profile'"
                     class="px-4 py-2 rounded-xl text-sm font-semibold transition"
                     :class="tab==='profile' ? 'bg-emerald-600 text-white' : 'bg-white border text-gray-600'">
@@ -292,6 +298,10 @@
                     <x-event-card :event="$event" />
                 @endforeach
             </div>
+        </div>
+
+        <div x-show="tab==='calendar'" x-cloak class="border-t border-gray-100 bg-gray-50/60 p-6 md:p-8">
+            @include('dashboard.partials.calendar', ['calendar' => $calendar])
         </div>
     </div>
 </div>

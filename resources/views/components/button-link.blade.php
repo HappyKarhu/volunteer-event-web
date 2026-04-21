@@ -7,7 +7,7 @@
     'block' => false,
 ])
 
-<a href="{{ $url }}" class="{{ $bgClass }} {{ $hoverClass }} {{ $textClass }} px-4 py-2 rounded 
+<a href="{{ $url }}" class="{{ $bgClass }} {{ $hoverClass }} {{ $textClass }} px-4 py-2 rounded-xl
     hover:shadow-md transition duration-300 
     {{ $block ? 'block w-full text-left' : 'inline-flex items-center' }} items-center">
     @if ($icon)

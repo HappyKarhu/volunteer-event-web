@@ -1,38 +1,77 @@
 # Volunteer Event Platform (Laravel 13)
+## 🌐 Demo
 
-A Laravel-based web platform that connects event organizers with volunteers.
+Currently runs locally. See installation instructions below.
+
+A full-stack Laravel application for managing volunteer events with role-based workflows and structured participation approval.
+
+## 🧠 Project Overview
+
+A Laravel-based platform that connects event organizers with volunteers through a structured application and approval system.
+
+Built using MVC architecture with role-based access control and workflow-driven event participation.
+
+## 💡 Motivation
+
+This project was built to explore workflow-driven systems in Laravel,
+focusing on role-based access, event management, and approval pipelines.
+
+## 📸 Screenshots
+### Landing page
+![Landing page](screenshots/first-page.png)
+
+### 🔐 Authentication
+![Register](screenshots/register.png)
+
+### 📅 Events
+![Event List](screenshots/events-list.png)
+![Event Details](screenshots/event.png)
+![Section Event](screenshots/section-event.png)
+
+### 🙋 Volunteer Dashboard
+![Volunteer Dashboard](screenshots/volunteer-dashboard.png)
+
+### 🛠 Organizer Dashboard
+![Organizer Dashboard](screenshots/organizer-dashboard.png)
 
 ## 🚀 Features
 
-### Public
-- View all events
-- View event details
-- Register / login
+### 👥 Authentication & Roles
+- Organizer and Volunteer roles
+- Role-based access control
 
-### Organizer
-- Create and manage events
-- Edit and delete own events
-- See their created events (dashboard)
-- View participants (volunteers) and can review->accept/reject
+### 📅 Event Management
+- Create, update, delete events
+- View event dashboard
+- Manage participants
 
-### Volunteer
-- Join events
-- Track participation
-- See own events (dashboard)
+### 🙋 Volunteer System
+- Browse and apply to events
+- Track application status
+- View joined events
 
-## 🗄️ Database Structure
+### 🧩 Event Workflow
+- Event application approval workflow
+- Section-based volunteer assignment
+- Application status tracking (approve / reject / pending)
 
-- users
-- events
-- event_sections
-- event_attendees
-- section_volunteers
-- preloaded_photos
-- contact_messages
-- notification_logs
-- event_applications
-- event_application_status_histories
-- messages
+## 🗄️ System Design
+
+The system is built around a structured event participation workflow:
+
+- Users can register as organizers or volunteers
+- Organizers create and manage events
+- Volunteers apply for participation
+- Applications go through an approval workflow
+- Accepted volunteers are assigned to events or sections
+
+Core domain models:
+- User
+- Event
+- Event Application
+- Event Attendee
+- Event Section
+- Messaging System
 
 ## ⚙️ Tech Stack
 
@@ -40,6 +79,42 @@ A Laravel-based web platform that connects event organizers with volunteers.
 - Blade (UI)
 - MySQL
 - TailwindCSS
+
+## 📁 Project Structure
+
+The project follows Laravel MVC architecture:
+
+```
+
+app/
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│   └── Requests/
+├── Models/
+│   ├── User.php
+│   ├── Event.php
+│   ├── EventApplication.php
+│   ├── EventAttendee.php
+│   ├── SectionVolunteer.php
+│   ├── Message.php
+│   ├── EventSection.php
+│   ├── EventApplicationStatusHistory.php
+resources/
+├── views/
+│   ├── events/
+│   ├── dashboard/
+│   ├── profile/
+│   └── auth/
+routes/
+├── web.php
+├── auth.php
+database/
+├── migrations/
+├── seeders/
+screenshots/
+
+```
 
 ## 🔐 Roles
 
@@ -73,10 +148,22 @@ The system supports two event types:
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/HappyKarhu/volunteer-event-web.git
+cd volunteer-event-web
 composer install
+npm install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate
-php artisan serve
+php artisan migrate --seed
+
+```
+> ⚠️ Configure your `.env` file (database, mail, etc.) before running the project.
+
+## ▶️ Running the project
+
+This project requires both Laravel and Vite dev server:
+
+- Backend: `php artisan serve`
+- Frontend assets: `npm run dev`
+
+Make sure both are running simultaneously.

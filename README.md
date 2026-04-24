@@ -69,7 +69,7 @@ focusing on:
 ## 📸 Screenshots
 
 ### Landing page
-![Landing page](screenshots/first-page.png)
+![Landing page](screenshots/landing-page.jpg)
 
 ### 🔐 Authentication
 ![Register](screenshots/register.png)

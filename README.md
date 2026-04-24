@@ -1,22 +1,73 @@
 # Volunteer Event Platform (Laravel 13)
-## 🌐 Demo
 
-Currently runs locally. See installation instructions below.
+![Laravel](https://img.shields.io/badge/Laravel-13-red?style=for-the-badge&logo=laravel)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+![PHP](https://img.shields.io/badge/PHP-8+-777BB4?style=for-the-badge&logo=php)
 
 A full-stack Laravel application for managing volunteer events with role-based workflows and structured participation approval.
 
+---
+
+## 🌐 LIve Demo
+
+This project runs locally. Follow the installation steps below to run it on your machine.
+
+After setup, you can immediately explore the full workflow using pre-seeded accounts (see below).
+
+---
+
+## 🎯 Demo Accounts
+
+Use these pre-seeded accounts to explore the system:
+
+### 👤 Demo Organizer
+
+Used to create and manage events, review applications, and assign volunteers.
+
+- **Email:** testorganizer@test.com  
+- **Password:** password 
+
+---
+
+### 🙋 Demo Volunteers
+
+Used to browse events and submit applications
+
+- **Email:** volunteer1@test.com  
+- **Password:** password  
+
+- **Email:** volunteer2@test.com  
+- **Password:** password  
+
+> These accounts are pre-seeded for demonstration purposes.
+
+---
+
 ## 🧠 Project Overview
 
-A Laravel-based platform that connects event organizers with volunteers through a structured application and approval system.
+This application connects event organizers with volunteers through a structured workflow system.
 
-Built using MVC architecture with role-based access control and workflow-driven event participation.
+It supports event creation, volunteer applications, approval processes, and role-based assignment including section-based participation.
+
+Built using Laravel MVC architecture with a focus on clean workflow design and real-world event management logic.
+
+---
 
 ## 💡 Motivation
 
-This project was built to explore workflow-driven systems in Laravel,
-focusing on role-based access, event management, and approval pipelines.
+This project was built to explore real-world workflow systems in Laravel,
+focusing on:
+
+- Role-based access control  
+- Multi-step approval workflows  
+- Event management systems  
+- Structured relationships between users, events, and participation roles
+
+---
 
 ## 📸 Screenshots
+
 ### Landing page
 ![Landing page](screenshots/first-page.png)
 
@@ -34,6 +85,8 @@ focusing on role-based access, event management, and approval pipelines.
 ### 🛠 Organizer Dashboard
 ![Organizer Dashboard](screenshots/organizer-dashboard.png)
 
+---
+
 ## 🚀 Features
 
 ### 👥 Authentication & Roles
@@ -47,31 +100,41 @@ focusing on role-based access, event management, and approval pipelines.
 
 ### 🙋 Volunteer System
 - Browse and apply to events
-- Track application status
+- Track application status (pending / approved / rejected)
 - View joined events
 
 ### 🧩 Event Workflow
 - Event application approval workflow
 - Section-based volunteer assignment
-- Application status tracking (approve / reject / pending)
+- Structured participation handling
+
+### ⏳ Waitlist System
+- Automatically handles full events
+- Volunteers can join waitlist when capacity is reached
+- Organizers can promote users from waitlist to participants
+
+---
 
 ## 🗄️ System Design
 
 The system is built around a structured event participation workflow:
 
 - Users can register as organizers or volunteers
-- Organizers create and manage events
+- Organizers create and manage own events
 - Volunteers apply for participation
-- Applications go through an approval workflow
-- Accepted volunteers are assigned to events or sections
+- Applications are reviewed by organizers
+- Approved volunteers are assigned to events or sections
+- Participation is tracked throughout the system
 
-Core domain models:
-- User
+### Core domain models:
+- User (Organizer / Volunteer)
 - Event
-- Event Application
-- Event Attendee
-- Event Section
-- Messaging System
+- EventApplication
+- EventAttendee
+- EventSection
+- SectionVolunteer
+- Message system
+- EventApplicationStatusHistory
 
 ## ⚙️ Tech Stack
 
@@ -112,16 +175,20 @@ routes/
 database/
 ├── migrations/
 ├── seeders/
+
 screenshots/
 
 ```
+---
 
 ## 🔐 Roles
 
-- Organizer → manages events
-- Volunteer → joins events
+- Organizer → manages events and applications
+- Volunteer → applies and participates in events
 
-## 📝 Applying to the event
+---
+
+## 📝 Event Workflow
 
 The system supports two event types:
 
@@ -132,28 +199,32 @@ The system supports two event types:
 
 ### 🟣 Sectioned event
 - Volunteer submits an application (EventApplication)
-- Volunteer selects a section when applying
+- Volunteer selects a section when applying in message
 - Organizer reviews application and assigns/validates section
 - If approved → volunteer becomes SectionVolunteer
 
 ## 🔮 Planned Features
 
-- Waitlist system
-- Admin dashboard
-- Multi-language support
-- Analytics dashboard
-- Editable pages (About, Terms, etc.)
-- Ratings/reputation system
+- Admin dashboard for platform moderation  
+- Multi-language support  
+- Analytics dashboard for organizers  
+- Editable static pages (About, Terms)  
+- Ratings / reputation system  
+- Enhanced notification system (email + in-app)
+- ⏰ Event scheduling with start/end time support 
 
 ## 📦 Installation
 
 ```bash
 git clone https://github.com/HappyKarhu/volunteer-event-web.git
 cd volunteer-event-web
+
 composer install
 npm install
+
 cp .env.example .env
 php artisan key:generate
+
 php artisan migrate --seed
 
 ```

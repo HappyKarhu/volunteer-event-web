@@ -6,6 +6,7 @@ use App\Models\EventApplication;
 use App\Models\EventAttendee;
 use App\Models\SectionVolunteer;
 use Illuminate\Http\Request;
+use App\Notifications\ApplicationStatusChangeNotification;
 
 class EventApplicationController extends Controller
 {
@@ -140,6 +141,9 @@ class EventApplicationController extends Controller
             'status' => EventApplication::STATUS_APPROVED,
         ]);
 
+        // Notify volunteer about approval
+        $application->user->notify(new ApplicationStatusChangeNotification($application));
+
         return back()->with('success', 'Application approved.');
     }
 
@@ -156,6 +160,9 @@ class EventApplicationController extends Controller
         $application->update([
             'status' => EventApplication::STATUS_REJECTED,
         ]);
+
+        // Notify volunteer about rejection
+        $application->user->notify(new ApplicationStatusChangeNotification($application));
 
         return back()->with('success', 'Application rejected.');
     }
@@ -198,6 +205,9 @@ class EventApplicationController extends Controller
             'status' => EventApplication::STATUS_CANCELLED,
         ]);
 
+        // Notify volunteer about cancellation
+        $application->user->notify(new ApplicationStatusChangeNotification($application));
+
         if ($event->type === 'simple') {
             $this->promoteFromWaitlist($event);
         }
@@ -230,6 +240,9 @@ class EventApplicationController extends Controller
             'status' => EventApplication::STATUS_APPROVED,
         ]);
 
+        // Notify the promoted volunteer
+        $next->user->notify(new ApplicationStatusChangeNotification($next));
+        
         EventAttendee::firstOrCreate(
             [
                 'event_id' => $event->id,

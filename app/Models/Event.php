@@ -31,6 +31,7 @@ class Event extends Model
         'is_free',
         'price',
         'status',
+        'reminder_sent_at',
     ];
 
     protected $casts = [
@@ -38,6 +39,7 @@ class Event extends Model
         'end_date' => 'datetime',
         'is_free' => 'boolean',
         'price' => 'decimal:2',
+        'reminder_sent_at' => 'datetime',
     ];
 
 

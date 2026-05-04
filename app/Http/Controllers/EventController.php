@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\EventAttendee;
+use App\Notifications\EventChangedNotification;
 
 class EventController extends Controller
 {
@@ -140,7 +141,33 @@ class EventController extends Controller
         $validated = $this->validateEvent($request);
         $validated = $this->prepareEventData($request, $validated, $event);
 
-        $event->update($validated);
+        $event->fill($validated);
+        $importantFieldsChanged = $event->isDirty([
+            'title', 
+            'start_date', 
+            'end_date',
+            'location', 
+            'status',
+        ]);
+
+        $wasCancelled = $event->isDirty('status')
+            && $event->status === 'cancelled';
+
+        $event->save();
+
+        if ($importantFieldsChanged) {
+            $changeType = $wasCancelled ? 'cancelled' : 'updated';
+
+            $event->approvedApplications()
+                ->with('user')
+                ->get()
+                ->pluck('user')
+                ->filter()
+                ->each(function ($user) use ($event, $changeType) {
+                    $user->notify(new EventChangedNotification($event, $changeType));
+                });
+        }
+
         $this->syncSections($event, $validated['type'], $request->input('sections', []));
 
         return redirect()->route('dashboard')->with('success', 'Event updated successfully.');

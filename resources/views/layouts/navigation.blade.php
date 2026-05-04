@@ -18,8 +18,65 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-auto sm:space-x-4">
+                @auth
+                    <x-dropdown align="right" width="80">
+                        <x-slot name="trigger">
+                            <button class="relative inline-flex items-center p-2 text-gray-500 hover:text-gray-700 focus:outline-none transition">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a3.001 3.001 0 0 1-5.714 0M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7" />
+                                </svg>
+
+                                @if (auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="absolute -top-1 -right-1 inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    </span>
+                                @endif
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <div class="flex items-center justify-between border-b border-gray-100 px-4 py-2">
+                                <span class="text-sm font-semibold text-gray-700">
+                                    Notifications
+                                </span>
+
+                                @if (auth()->user()->unreadNotifications->count() > 0)
+                                    <form method="POST" action="{{ route('notifications.readAll') }}">
+                                        @csrf
+                                        <button type="submit" class="text-xs font-medium text-emerald-600 hover:underline">
+                                            Mark all as read
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+
+                            @forelse (auth()->user()->notifications()->latest()->limit(8)->get() as $notification)
+                                <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="block w-full px-4 py-3 text-left text-sm hover:bg-gray-100 {{ $notification->read_at ? 'text-gray-500' : 'bg-emerald-50 font-semibold text-gray-900' }}"
+                                    >
+                                        <div>{{ $notification->data['title'] ?? 'Notification' }}</div>
+                                        <div class="text-xs font-normal text-gray-500">
+                                            {{ $notification->data['message'] ?? '' }}
+                                        </div>
+                                        <div class="text-xs font-normal text-gray-400">
+                                            {{ $notification->created_at->diffForHumans() }}
+                                        </div>
+                                    </button>
+                                </form>
+                            @empty
+                                <div class="px-4 py-3 text-sm text-gray-500">
+                                    No notifications yet.
+                                </div>
+                            @endforelse
+                        </x-slot>
+                    </x-dropdown>
+                @endauth
+
+                <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -27,7 +84,7 @@
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>

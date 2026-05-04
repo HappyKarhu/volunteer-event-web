@@ -1,8 +1,30 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\Event;
+use App\Notifications\EventReminderNotification;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Schedule::call(function () {
+    $events = Event::query()
+        ->where('status', 'published')
+        ->whereNull('reminder_sent_at')
+        ->whereBetween('start_date', [
+            now(),
+            now()->addDay(),
+        ])
+        ->with('approvedApplications.user')
+        ->get();
+
+    foreach ($events as $event) {
+        $event->approvedApplications
+            ->pluck('user')
+            ->filter()
+            ->each(function ($user) use ($event) {
+                $user->notify(new EventReminderNotification($event));
+            });
+
+        $event->update([
+            'reminder_sent_at' => now(),
+        ]);
+    }
+})->everyThirtyMinutes();

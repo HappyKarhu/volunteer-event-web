@@ -10,6 +10,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\SectionVolunteerController;
 use App\Http\Controllers\EventApplicationController;
 use App\Http\Controllers\EventApplicationMessageController;
+use Illuminate\Http\Request;
 
 
 //public routes
@@ -72,6 +73,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/applications/{application}/messages', [EventApplicationMessageController::class, 'store'])
         ->name('applications.messages.store');
 });
+
+//notification routes (logged in users only)
+Route::middleware('auth')->group(function () {
+    Route::post('/notifications/{notification}/read', function (string $notificationId, Request $request) {
+        $notification = $request->user()
+            ->notifications()
+            ->where('id', $notificationId)
+            ->firstOrFail();
+
+        $notification->markAsRead();
+
+        return redirect($notification->data['url'] ?? route('dashboard'));
+    })->name('notifications.read');
+
+    Route::post('/notifications/read-all', function (Request $request) {
+        $request->user()->unreadNotifications->markAsRead();
+
+        return back();
+    })->name('notifications.readAll');
+});
+
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 

@@ -17,10 +17,13 @@
             enctype="multipart/form-data"
             class="space-y-6 mt-6"
             x-data="{
-                showErrors: true,
                 isFree: {{ old('is_free', 0) ? 'true' : 'false' }},
                 type: '{{ old('type', 'simple') }}',
                 sections: {{ \Illuminate\Support\Js::from(old('sections', [['role_name' => '', 'description' => '', 'capacity' => '']])) }},
+                sectionErrors: {{ \Illuminate\Support\Js::from($errors->getMessages()) }},
+                sectionError(index, field) {
+                    return this.sectionErrors[`sections.${index}.${field}`]?.[0] ?? null;
+                },
                 addSection() {
                     this.sections.push({ role_name: '', description: '', capacity: '' });
                 },
@@ -28,7 +31,6 @@
                     this.sections.splice(index, 1);
                 }
             }"
-            x-init="setTimeout(() => showErrors = false, 5000)"
         >
             @csrf
             {{-- Basic Info --}}
@@ -100,28 +102,12 @@
                             name="start_date"
                             label="Start Date"
                         />
-                        {{-- Start date error --}}
-                        @error('start_date')
-                            <p x-show="showErrors" 
-                            x-transition 
-                            class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
                     </div>
                     <div>
                         <x-inputs.date
                             name="end_date"
                             label="End Date"
                         />
-                        {{-- End date error --}}
-                        @error('end_date')
-                            <p x-show="showErrors" 
-                            x-transition 
-                            class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
                     </div>
                 </div>
 
@@ -150,14 +136,6 @@
                         type="number"
                         step="0.01"
                     />
-                    {{-- Price error --}}
-                    @error('price')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
             </div>
 
@@ -238,7 +216,7 @@
                 </div>
 
                 @error('sections')
-                    <p x-show="showErrors" x-transition class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
 
                 <template x-for="(section, index) in sections" :key="index">
@@ -256,17 +234,26 @@
                             <div>
                                 <label class="{{ $labelStyle }}">Role Name</label>
                                 <input type="text" :name="`sections[${index}][role_name]`" x-model="section.role_name" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="Cleaner, Speaker, Setup team...">
+                                <template x-if="sectionError(index, 'role_name')">
+                                    <p class="text-red-500 text-sm mt-1" x-text="sectionError(index, 'role_name')"></p>
+                                </template>
                             </div>
 
                             <div>
                                 <label class="{{ $labelStyle }}">Capacity</label>
                                 <input type="number" min="1" :name="`sections[${index}][capacity]`" x-model="section.capacity" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="How many volunteers?">
+                                <template x-if="sectionError(index, 'capacity')">
+                                    <p class="text-red-500 text-sm mt-1" x-text="sectionError(index, 'capacity')"></p>
+                                </template>
                             </div>
                         </div>
 
                         <div>
                             <label class="{{ $labelStyle }}">Role Description</label>
                             <textarea :name="`sections[${index}][description]`" x-model="section.description" rows="3" class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-emerald-500" placeholder="What will this role help with?"></textarea>
+                            <template x-if="sectionError(index, 'description')">
+                                <p class="text-red-500 text-sm mt-1" x-text="sectionError(index, 'description')"></p>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -296,14 +283,6 @@
                             'cancelled' => 'Cancelled'
                         ]"
                     />
-                    
-                    @error('status')
-                        <p x-show="showErrors" 
-                        x-transition 
-                        class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
                 {{-- Photo --}}

@@ -237,7 +237,7 @@ class EventController extends Controller
             'type' => 'required|in:simple,sectioned',
             'photo' => 'nullable|image|max:5120',
             'location' => 'nullable|string|max:255',
-            'capacity' => 'nullable|integer|min:1',
+            'capacity' => 'nullable|integer|min:1|max:1000',
             'tags' => 'nullable|string',
             'requirements' => 'nullable|string',
             'responsibilities' => 'nullable|string',
@@ -257,7 +257,7 @@ class EventController extends Controller
             'sections' => 'nullable|array',
             'sections.*.role_name' => 'nullable|string|max:255',
             'sections.*.description' => 'nullable|string|max:1000',
-            'sections.*.capacity' => 'nullable|integer|min:1',
+            'sections.*.capacity' => 'nullable|integer|min:1|max:1000',
         ]);
 
         $sections = $this->normalizeSections($request->input('sections', []));

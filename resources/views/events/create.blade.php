@@ -198,6 +198,8 @@
                         name="capacity"
                         label="Capacity"
                         type="number"
+                        min="1"
+                        max="1000"
                         placeholder="Maximum number of participants."
                         :value="old('capacity')" />
                 </div>

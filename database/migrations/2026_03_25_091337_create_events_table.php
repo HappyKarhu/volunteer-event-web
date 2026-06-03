@@ -32,12 +32,15 @@ return new class extends Migration
             $table->index('type');
         });
 
-        // capacity = 0 or negative is rejected
-        DB::statement("
-            ALTER TABLE events
-            ADD CONSTRAINT events_capacity_check
-            CHECK (capacity IS NULL OR capacity >= 1)
-        ");
+        // SQLite cannot add named check constraints after table creation.
+        if (DB::getDriverName() !== 'sqlite') {
+            // capacity = 0 or negative is rejected
+            DB::statement("
+                ALTER TABLE events
+                ADD CONSTRAINT events_capacity_check
+                CHECK (capacity IS NULL OR capacity >= 1)
+            ");
+        }
     }
 
     /**

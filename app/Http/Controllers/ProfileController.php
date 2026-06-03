@@ -36,11 +36,16 @@ class ProfileController extends Controller
         }
 
         $user->name = $data['name'];
+        $user->email = $data['email'];
         $user->bio = $data['bio'] ?? null;
         $user->skills = $data['skills'] ?? null;
         $user->contact_email = $data['contact_email'] ?? null;
         $user->website = $data['website'] ?? null;
         $user->phone = $data['phone'] ?? null;
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
 
         // Handle avatar upload
         if ($request->hasFile('logo')) {
@@ -53,7 +58,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('dashboard')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
 
     }
 

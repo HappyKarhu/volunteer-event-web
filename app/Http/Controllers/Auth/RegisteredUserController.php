@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:organizer,volunteer'],
+            'role' => ['nullable', 'in:organizer,volunteer'],
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp','max:2048'], // Optional photo upload
         ]);
 
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
         'name' => $request->name,
         'email' => $request->email,
         'password' => $request->password,
-        'role' => $request->role,
+        'role' => $request->input('role', 'volunteer'),
     ];
 
     if ($request->hasFile('photo')) {
